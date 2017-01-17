@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="akebi" size="380.000000 368.000000" />
+    <ImageTarget name="fuji2" size="685.000000 554.000000" />
+    <ImageTarget name="test" size="231.000000 155.000000" />
+  </Tracking>
+</QCARConfig>
