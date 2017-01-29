@@ -31,4 +31,10 @@ public class SceneLoadAttach : MonoBehaviour {
             Debug.Log("LoadSceneNotFound");
         }
     }
+
+    public void MapSceneLoad(string FileID)
+    {
+        AppData.SelectTargetName = FileID;
+        SceneManager.LoadSceneAsync("Content");
+    }
 }
