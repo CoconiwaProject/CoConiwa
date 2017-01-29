@@ -23,7 +23,7 @@ public class ContentManager : MonoBehaviour
     void Start ()
     {
         index = GetIndex(AppData.SelectTargetName);
-        m_Image.sprite = Resources.Load<Sprite>(contentsData.Elements[index].FileID+".jpg");
+        m_Image.sprite = Resources.Load<Sprite>(contentsData.Elements[index].FileID);
         ContentName.text = contentsData.Elements[index].ContentsName;
         ContentText.text = contentsData.Elements[index].ContentsText;
 	}
@@ -39,7 +39,7 @@ public class ContentManager : MonoBehaviour
             }
         }
         Debug.LogError("NotFoundData");
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Title");
+        //UnityEngine.SceneManagement.SceneManager.LoadScene("Title");
         return -1;
     }
 }

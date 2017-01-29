@@ -33,7 +33,8 @@ public class CSVImpoter : AssetPostprocessor
                 // 中身を削除
                 data.Elements.Clear();
             }
-
+            //変更ここから//
+            AssetDatabase.StartAssetEditing();
             // CSVファイルをオブジェクトへ保存
             using (StreamReader sr = new StreamReader(targetFile))
             {
@@ -58,7 +59,13 @@ public class CSVImpoter : AssetPostprocessor
                 }
             }
 
-            // 保存
+            //変更ここまで//
+            AssetDatabase.StopAssetEditing();
+
+            //変更をUnityEditorに伝える//
+            EditorUtility.SetDirty(data);
+
+            //すべてのアセットを保存//
             AssetDatabase.SaveAssets();
 
             Debug.Log("Data updated.");
