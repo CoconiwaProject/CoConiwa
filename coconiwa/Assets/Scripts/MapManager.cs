@@ -8,6 +8,9 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     GameObject Map;
 
+    [SerializeField]
+    public ContentsData m_ContentsData;
+
     //カメラ視覚の範囲
     float vMin = 1.0f;
     float vMax = 5.0f;
