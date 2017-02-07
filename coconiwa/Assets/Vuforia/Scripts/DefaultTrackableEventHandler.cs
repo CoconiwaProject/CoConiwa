@@ -86,6 +86,7 @@ namespace Vuforia
             //’Ç‰Á•ª
             AppData.SelectTargetName = GetComponent<ImageTargetBehaviour>().ImageTarget.Name;
             UnityEngine.SceneManagement.SceneManager.LoadScene("Load");
+            PlayerPrefs.SetInt("GetContents"+ AppData.SelectTargetName,1);
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
         }
 

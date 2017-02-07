@@ -17,6 +17,9 @@ public class MapManager : MonoBehaviour
 
     List<MapMaker> makerList = new List<MapMaker>();
 
+    [SerializeField]
+    public ContentsData m_ContentsData;
+
     //カメラ視覚の範囲
     float vMin = 1.0f;
     float vMax = 5.0f;
