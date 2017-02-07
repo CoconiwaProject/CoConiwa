@@ -1,12 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapManager : MonoBehaviour
 {
+    [SerializeField]
+    GameObject Map = null;
 
     [SerializeField]
-    GameObject Map;
+    ContentsData contentsData;
+
+    public Image namePopUp = null;
+
+    public static MapManager I = null;
+
+    List<MapMaker> makerList = new List<MapMaker>();
 
     //カメラ視覚の範囲
     float vMin = 1.0f;
@@ -19,10 +28,26 @@ public class MapManager : MonoBehaviour
 
     //指を離した時間
     private Timer separateTime = new Timer();
+    
+    void Awake()
+    {
+        if(I != null)
+        {
+            Destroy(I);
+            return;
+        }
 
-    // Use this for initialization
+        I = this;
+    }
+
     void Start()
     {
+        List<GameObject> tempList = new List<GameObject>();
+        tempList.AddRange(GameObject.FindGameObjectsWithTag("Maker"));
+        for (int i = 0; i < tempList.Count; i++)
+        {
+            makerList.Add(tempList[i].GetComponent<MapMaker>());
+        }
         TouchManager.Instance.Drag += OnMapSwipe;
     }
 
@@ -102,7 +127,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    //２本の指の感覚を広くした時がプラス、狭めた時がマイナスの値になる
+    //２本の指の間隔を広くした時がプラス、狭めた時がマイナスの値になる
     float GetPinchValue()
     {
         if (Input.touchCount < 2) return 0.0f;
@@ -137,5 +162,22 @@ public class MapManager : MonoBehaviour
         t = Mathf.Clamp(t, 0, 1);
 
         return a + ((b - a) * t);
+    }
+
+    public string GetContentName(string name)
+    {
+        int index = contentsData.Elements.FindIndex(n => n.FileID == name);
+
+        if (index == -1) return "エラー";
+
+        return contentsData.Elements[index].ContentsName;
+    }
+
+    public void TouchMaker()
+    {
+        for(int i = 0;i < makerList.Count;i++)
+        {
+            makerList[i].IsSelect = false;
+        }   
     }
 }
