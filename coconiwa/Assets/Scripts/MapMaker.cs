@@ -32,6 +32,6 @@ public class MapMaker : MonoBehaviour
     void MapSceneLoad()
     {
         AppData.SelectTargetName = fileID;
-        GameObject.Find("Canvas1").GetComponentInChildren<UnderBerMenu>().ChangeScene(1.0f, "Content");
+        GameObject.Find("Canvas2").GetComponentInChildren<UnderBerMenu>().ChangeScene(1.0f, "Content");
     }
 }

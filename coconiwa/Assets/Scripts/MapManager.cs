@@ -17,9 +17,6 @@ public class MapManager : MonoBehaviour
 
     List<MapMaker> makerList = new List<MapMaker>();
 
-    [SerializeField]
-    public ContentsData m_ContentsData;
-
     //カメラ視覚の範囲
     float vMin = 1.0f;
     float vMax = 5.0f;
@@ -62,7 +59,7 @@ public class MapManager : MonoBehaviour
     void OnMapSwipe(object sender, CustomInputEventArgs e)
     {
 
-        this.Map.transform.position += new Vector3(e.Input.DeltaPosition.x, e.Input.DeltaPosition.y, 0) * 5.0f;
+        this.Map.transform.position += new Vector3(e.Input.DeltaPosition.x, e.Input.DeltaPosition.y, 0) * 0.01f;
 
         float t = 1000.0f * Map.transform.localScale.x;
         float yt = 500.0f * Map.transform.localScale.y;
