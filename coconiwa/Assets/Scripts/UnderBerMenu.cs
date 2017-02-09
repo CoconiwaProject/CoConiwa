@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,11 +8,15 @@ public class UnderBerMenu : MonoBehaviour
     [SerializeField]
     Button[] m_Icons;
 
+    [SerializeField]
+    Image fade = null;
+
 	// Use this for initialization
 	void Start ()
     {
         m_Icons = transform.GetComponentsInChildren<Button>();
         ActiveIconDisable();
+        StartCoroutine(FadeOut(1.0f));
 	}
 
     void ActiveIconDisable()
@@ -34,4 +38,34 @@ public class UnderBerMenu : MonoBehaviour
     {
 		
 	}
+
+    public IEnumerator FadeIn(float transitionTime, Action action)
+    {
+        fade.gameObject.SetActive(true);
+        float t = 0.0f;
+        while(true)
+        {
+            fade.fillAmount = t / transitionTime;
+            t += Time.deltaTime;
+            if (t > transitionTime) break;
+            yield return null;
+        }
+        fade.gameObject.SetActive(false);
+
+        action.Invoke();
+    }
+
+    public IEnumerator FadeOut(float transitionTime)
+    {
+        fade.gameObject.SetActive(true);
+        float t = 0.0f;
+        while (true)
+        {
+            fade.fillAmount = 1 - (t / transitionTime);
+            t += Time.deltaTime;
+            if (t > transitionTime) break;
+            yield return null;
+        }
+        fade.gameObject.SetActive(false);
+    }
 }

@@ -1,23 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoadAttach : MonoBehaviour {
+public class SceneLoadAttach : MonoBehaviour
+{
 
     [SerializeField]
     string LoadSceneName;
 
+    [SerializeField]
+    float transitionTime = 0.0f;
+
     public void LoadSceneAsync()
     {
-        try
+        FadeIn(() =>
         {
-            SceneManager.LoadSceneAsync(LoadSceneName);
-        }
-        catch
-        {
-            Debug.Log("LoadSceneNotFound");
-        }
+            try
+            {
+                SceneManager.LoadSceneAsync(LoadSceneName);
+            }
+            catch
+            {
+                Debug.Log("LoadSceneNotFound");
+            }
+        });
     }
 
     public void LoadScene()
@@ -36,5 +42,16 @@ public class SceneLoadAttach : MonoBehaviour {
     {
         AppData.SelectTargetName = FileID;
         SceneManager.LoadSceneAsync("Content");
+    }
+
+    void FadeIn(Action action)
+    {
+        if (transitionTime <= 0)
+        {
+            action.Invoke();
+            return;
+        }
+
+        StartCoroutine(transform.parent.GetComponent<UnderBerMenu>().FadeIn(transitionTime, action));
     }
 }
