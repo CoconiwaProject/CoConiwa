@@ -21,6 +21,6 @@ public class NamePopUp : MonoBehaviour
     public void MapSceneLoad()
     {
         AppData.SelectTargetName = fileID;
-        SceneManager.LoadSceneAsync("Content");
+        GameObject.Find("Canvas2").GetComponentInChildren<UnderBerMenu>().ChangeScene(1.0f, "Content");
     }
 }

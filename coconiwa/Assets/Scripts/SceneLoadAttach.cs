@@ -13,17 +13,20 @@ public class SceneLoadAttach : MonoBehaviour
 
     public void LoadSceneAsync()
     {
-        FadeIn(() =>
+        if (transitionTime > 0.0f)
         {
-            try
-            {
-                SceneManager.LoadSceneAsync(LoadSceneName);
-            }
-            catch
-            {
-                Debug.Log("LoadSceneNotFound");
-            }
-        });
+            transform.parent.GetComponent<UnderBerMenu>().ChangeScene(transitionTime, LoadSceneName);
+            return;
+        }
+
+        try
+        {
+            SceneManager.LoadSceneAsync(LoadSceneName);
+        }
+        catch
+        {
+            Debug.Log("LoadSceneNotFound");
+        }
     }
 
     public void LoadScene()
@@ -41,17 +44,6 @@ public class SceneLoadAttach : MonoBehaviour
     public void MapSceneLoad(string FileID)
     {
         AppData.SelectTargetName = FileID;
-        SceneManager.LoadSceneAsync("Content");
-    }
-
-    void FadeIn(Action action)
-    {
-        if (transitionTime <= 0)
-        {
-            action.Invoke();
-            return;
-        }
-
-        StartCoroutine(transform.parent.GetComponent<UnderBerMenu>().FadeIn(transitionTime, action));
+        GameObject.Find("Canvas1").GetComponentInChildren<UnderBerMenu>().ChangeScene(1.0f, "Content");
     }
 }
