@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class UnderBerMenu : MonoBehaviour
 {
+    public static UnderBerMenu I;
+
     List<Button> m_Icons = new List<Button>();
 
     [SerializeField]
@@ -14,7 +16,7 @@ public class UnderBerMenu : MonoBehaviour
     Coroutine fadeCoroutine;
     Coroutine transitionCoroutine;
 
-    public static UnderBerMenu I;
+    float m_TransitionTime = 0.3f;
 
     // Use this for initialization
     void Start()
@@ -38,7 +40,7 @@ public class UnderBerMenu : MonoBehaviour
         canvas.planeDistance = 90.0f;
 
         //読み込み終わったらフェードアウトする
-        fadeCoroutine = StartCoroutine(FadeOut(1.0f));
+        fadeCoroutine = StartCoroutine(FadeOut(m_TransitionTime));
     }
 
     void ChangeIconActive(string nextSceneName)
@@ -64,11 +66,11 @@ public class UnderBerMenu : MonoBehaviour
 
     }
 
-    public void ChangeScene(float transitionTime, string loadSceneName)
+    public void ChangeScene(string loadSceneName)
     {
         if (fadeCoroutine != null) return;
 
-        transitionCoroutine = StartCoroutine(SceneTransition(transitionTime, loadSceneName));
+        transitionCoroutine = StartCoroutine(SceneTransition(m_TransitionTime, loadSceneName));
     }
 
     IEnumerator SceneTransition(float transitionTime, string loadSceneName)
@@ -98,7 +100,7 @@ public class UnderBerMenu : MonoBehaviour
         while (true)
         {
             t += Time.deltaTime;
-            fade.fillAmount = t;
+            fade.color =new Color(1,1,1,(t/transitionTime));
 
             if (t > transitionTime) break;
             yield return null;
@@ -114,7 +116,9 @@ public class UnderBerMenu : MonoBehaviour
         while (true)
         {
             t += Time.deltaTime;
-            fade.fillAmount = 1.0f - t;
+            //fade.fillAmount = 1.0f - t;
+            fade.color = fade.color = new Color(1, 1, 1, 1.0f-(t / transitionTime));
+
             if (t > transitionTime) break;
             yield return null;
         }

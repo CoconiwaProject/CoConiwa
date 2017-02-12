@@ -9,13 +9,13 @@ public class SceneLoadAttach : MonoBehaviour
     string LoadSceneName;
 
     [SerializeField]
-    float transitionTime = 0.0f;
+    bool isTransition = true;
 
     public void LoadSceneAsync()
     {
-        if (transitionTime > 0.0f)
+        if (isTransition)
         {
-            transform.parent.GetComponent<UnderBerMenu>().ChangeScene(transitionTime, LoadSceneName);
+            transform.parent.GetComponent<UnderBerMenu>().ChangeScene(LoadSceneName);
             return;
         }
 
@@ -44,6 +44,6 @@ public class SceneLoadAttach : MonoBehaviour
     public void MapSceneLoad(string FileID)
     {
         AppData.SelectTargetName = FileID;
-        GameObject.Find("Canvas1").GetComponentInChildren<UnderBerMenu>().ChangeScene(1.0f, "Content");
+        GameObject.Find("Canvas2").GetComponentInChildren<UnderBerMenu>().ChangeScene("Content");
     }
 }
