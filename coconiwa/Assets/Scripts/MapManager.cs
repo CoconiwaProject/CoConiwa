@@ -12,6 +12,9 @@ public class MapManager : MonoBehaviour
     ContentsData contentsData;
 
     public Image namePopUp = null;
+    [SerializeField]
+    List<Image> namePopUpList = new List<Image>();
+    public List<Sprite> balloonImageList = new List<Sprite>();
 
     public static MapManager I = null;
 
@@ -173,11 +176,19 @@ public class MapManager : MonoBehaviour
         return contentsData.Elements[index].ContentsName;
     }
 
-    public void TouchMaker()
+    public void TouchMaker(string fileID)
     {
         for(int i = 0;i < makerList.Count;i++)
         {
             makerList[i].IsSelect = false;
-        }   
+        }
+
+        for (int i = 0; i < namePopUpList.Count; i++)
+        {
+            namePopUpList[i].gameObject.SetActive(false);
+        }
+
+        int index = (int)NamePopUp.GetMakerSize(GetContentName(fileID));
+        namePopUp = namePopUpList[index];
     }
 }

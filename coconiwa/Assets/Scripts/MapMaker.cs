@@ -15,7 +15,7 @@ public class MapMaker : MonoBehaviour
             return;
         }
 
-        MapManager.I.TouchMaker();
+        MapManager.I.TouchMaker(fileID);
         IsSelect = true;
         Image namePopUp = MapManager.I.namePopUp;
         namePopUp.gameObject.SetActive(true);
