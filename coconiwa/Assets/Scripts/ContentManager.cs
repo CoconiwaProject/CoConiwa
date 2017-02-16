@@ -35,6 +35,7 @@ public class ContentManager : MonoBehaviour
     void Start ()
     {
         index = GetIndex(AppData.SelectTargetName);
+        if (index == -1) return;
         m_Image.sprite = Resources.Load<Sprite>(contentsData.Elements[index].FileID);
         ContentName.text = contentsData.Elements[index].ContentsName;
         ContentText.text = contentsData.Elements[index].ContentsText;
