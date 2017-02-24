@@ -7,6 +7,14 @@ public class MapMaker : MonoBehaviour
     public string fileID = "";
     public bool IsSelect = false;
 
+    void Start()
+    {
+        if (PlayerPrefs.GetInt("GetContents" + fileID) == 0)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     public void Touch()
     {
         if (IsSelect)
@@ -26,7 +34,7 @@ public class MapMaker : MonoBehaviour
     Vector2 GetPopUpPosition()
     {
         //todo:画面端の確認
-        return GetComponent<RectTransform>().anchoredPosition + (Vector2.up * 50.0f);
+        return GetComponent<RectTransform>().anchoredPosition + (Vector2.up * 75.0f);
     }
 
     void MapSceneLoad()
