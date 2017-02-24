@@ -15,7 +15,15 @@ public class SceneLoadAttach : MonoBehaviour
     {
         if (isTransition)
         {
-            transform.parent.GetComponent<UnderBerMenu>().ChangeScene(LoadSceneName);
+            UnderBerMenu menu = transform.parent.GetComponent<UnderBerMenu>();
+            if (menu != null)
+            {
+                transform.parent.GetComponent<UnderBerMenu>().ChangeScene(LoadSceneName);
+            }
+            else
+            {
+                UnderBerMenu.I.ChangeScene(LoadSceneName);
+            }
             return;
         }
 
