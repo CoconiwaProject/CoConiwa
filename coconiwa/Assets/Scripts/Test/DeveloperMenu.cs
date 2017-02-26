@@ -12,6 +12,24 @@ public class DeveloperMenu : MonoBehaviour
     GameObject popUpMessage = null;
     Coroutine popUpCoroutine;
 
+    [SerializeField]
+    GameObject content = null;
+    [SerializeField]
+    GameObject developMenu = null;
+
+
+    public void Open()
+    {
+        developMenu.SetActive(true);
+        content.SetActive(false);
+    }
+
+    public void Close()
+    {
+        developMenu.SetActive(false);
+        content.SetActive(true);
+    }
+
     public void DeleteSaveData()
     {
         PlayerPrefs.DeleteAll();
