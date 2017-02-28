@@ -7,6 +7,7 @@ public class Loading : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Content");
+       GameObject.FindGameObjectWithTag("Underber").GetComponent<UnderBerMenu>().ChangeIconActive("Content");
 	}
 	
 	// Update is called once per frame

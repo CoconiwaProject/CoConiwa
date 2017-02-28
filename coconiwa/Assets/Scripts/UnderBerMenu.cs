@@ -31,6 +31,7 @@ public class UnderBerMenu : MonoBehaviour
 
         DontDestroyOnLoad(transform.parent.gameObject);
         m_Icons.AddRange(transform.GetComponentsInChildren<Button>());
+        StartCoroutine(FadeOut(2.0f));
     }
 
     private void OnLevelWasLoaded(int level)
@@ -43,8 +44,14 @@ public class UnderBerMenu : MonoBehaviour
         fadeCoroutine = StartCoroutine(FadeOut(m_TransitionTime));
     }
 
-    void ChangeIconActive(string nextSceneName)
+    public void ChangeIconActive(string nextSceneName)
     {
+        //カメラ起動画面に飛んだ場合書き換える。　めんどくさいんで許してちょ
+        if(nextSceneName== "CameraStarting")
+        {
+            nextSceneName = "Camera";
+        }
+
         for (int i = 0; i < m_Icons.Count; i++)
         {
             if (m_Icons[i].gameObject.name == nextSceneName)
