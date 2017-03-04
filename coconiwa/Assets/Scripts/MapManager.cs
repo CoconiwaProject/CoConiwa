@@ -9,7 +9,7 @@ public class MapManager : MonoBehaviour
     GameObject Map = null;
 
     [SerializeField]
-    ContentsData contentsData;
+    ContentsData contentsData = null;
 
     public Image namePopUp = null;
     [SerializeField]
@@ -19,6 +19,9 @@ public class MapManager : MonoBehaviour
     public static MapManager I = null;
 
     List<MapMaker> makerList = new List<MapMaker>();
+    MapMaker currentMaker;
+
+    bool isTap = false;
 
     //カメラ視覚の範囲
     float vMin = 1.0f;
@@ -29,12 +32,14 @@ public class MapManager : MonoBehaviour
     //最初にタッチした時の2点間の距離.
     private float backDist = 0.0f;
 
-    //指を離した時間
+    /// <summary>
+    /// 指を離した時間
+    /// </summary>
     private Timer separateTime = new Timer();
-    
+
     void Awake()
     {
-        if(I != null)
+        if (I != null)
         {
             Destroy(I);
             return;
@@ -52,17 +57,29 @@ public class MapManager : MonoBehaviour
             makerList.Add(tempList[i].GetComponent<MapMaker>());
         }
         TouchManager.Instance.Drag += OnMapSwipe;
+        TouchManager.Instance.TouchEnd += OnTouchEnd;
+        TouchManager.Instance.TouchStart += OnTouchStart;
     }
 
     private void OnDestroy()
     {
         TouchManager.Instance.Drag -= OnMapSwipe;
+        TouchManager.Instance.TouchEnd -= OnTouchEnd;
+        TouchManager.Instance.TouchStart -= OnTouchStart;
     }
 
     void OnMapSwipe(object sender, CustomInputEventArgs e)
     {
+        Vector3 deltaPosition = e.Input.DeltaPosition;
+        
+        float temp = 2.0f;
+        if(Mathf.Abs(deltaPosition.x) > temp ||Mathf.Abs(deltaPosition.y) > temp)
+        {
+            //スワイプが検出された
+            isTap = false;
+        }
 
-        this.Map.transform.position += new Vector3(e.Input.DeltaPosition.x, e.Input.DeltaPosition.y, 0) * 0.01f;
+        this.Map.transform.position += new Vector3(deltaPosition.x, deltaPosition.y, 0) * 0.01f;
 
         float t = 1000.0f * Map.transform.localScale.x;
         float yt = 500.0f * Map.transform.localScale.y;
@@ -100,13 +117,13 @@ public class MapManager : MonoBehaviour
         {
             v += Input.mouseScrollDelta.y * 0.2f;
         }
-        
+
         // 限界値をオーバーした際の処理
         if (v > vMax)
         {
-            if(Input.touchCount <= 0)
+            if (Input.touchCount <= 0)
             {
-                if(!separateTime.IsWorking) separateTime.TimerStart(1.0f);
+                if (!separateTime.IsWorking) separateTime.TimerStart(1.0f);
                 v = FloatLerp(v, vMax, separateTime.Progress);
             }
 
@@ -148,7 +165,7 @@ public class MapManager : MonoBehaviour
         else if (t1.phase == TouchPhase.Moved || t2.phase == TouchPhase.Moved)
         {
             float speed = 0.0001f;
-            if(t1.phase == TouchPhase.Stationary)
+            if (t1.phase == TouchPhase.Stationary)
             {
                 speed = 0.0002f;
             }
@@ -176,9 +193,11 @@ public class MapManager : MonoBehaviour
         return contentsData.Elements[index].ContentsName;
     }
 
-    public void TouchMaker(string fileID)
+    public void TouchMaker(string fileID, MapMaker maker)
     {
-        for(int i = 0;i < makerList.Count;i++)
+        isTap = false;
+        currentMaker = maker;
+        for (int i = 0; i < makerList.Count; i++)
         {
             makerList[i].IsSelect = false;
         }
@@ -190,5 +209,26 @@ public class MapManager : MonoBehaviour
 
         int index = (int)NamePopUp.GetMakerSize(GetContentName(fileID));
         namePopUp = namePopUpList[index];
+    }
+
+    void OnTouchStart(object sender, CustomInputEventArgs e)
+    {
+        isTap = true;
+    }
+
+    void OnTouchEnd(object sender, CustomInputEventArgs e)
+    {
+        //スワイプを検出されていればisTapはfalseになる
+        if (isTap) Tapped();
+    }
+
+    //タップされた(スワイプ時には呼ばれない予定)
+    void Tapped()
+    {
+        if (currentMaker == null) return;
+        if (!currentMaker.IsSelect) return;
+
+        currentMaker.IsSelect = false;
+        namePopUp.gameObject.SetActive(false);
     }
 }

@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class MapMaker : MonoBehaviour
-{
+{    
     public string fileID = "";
     public bool IsSelect = false;
+    private static Coroutine popUPCoroutine = null;
 
     void Start()
     {
@@ -23,12 +24,20 @@ public class MapMaker : MonoBehaviour
             return;
         }
 
-        MapManager.I.TouchMaker(fileID);
+        MapManager.I.TouchMaker(fileID, this);
         IsSelect = true;
         Image namePopUp = MapManager.I.namePopUp;
         namePopUp.gameObject.SetActive(true);
         namePopUp.rectTransform.anchoredPosition = GetPopUpPosition();
         namePopUp.GetComponent<NamePopUp>().SetText(fileID);
+        namePopUp.transform.localScale = Vector3.zero;
+
+        if(popUPCoroutine != null)
+        {
+            StopCoroutine(popUPCoroutine);
+        }
+
+        popUPCoroutine = StartCoroutine(PopUp(namePopUp));
     }
 
     Vector2 GetPopUpPosition()
@@ -41,5 +50,29 @@ public class MapMaker : MonoBehaviour
     {
         AppData.SelectTargetName = fileID;
         GameObject.Find("Canvas2").GetComponentInChildren<UnderBerMenu>().ChangeScene("Content");
+    }
+
+    IEnumerator PopUp(Image namePopUp)
+    {
+        float duration = 0.5f;
+        float t = 0.0f;
+        float progress = 0.0f;
+        Vector2 startPosition = GetComponent<RectTransform>().anchoredPosition;
+        Vector2 targetPosition = GetPopUpPosition();
+
+        while(true)
+        {
+            t += Time.deltaTime;
+
+            progress = t / duration;
+            progress *= progress;
+            namePopUp.rectTransform.anchoredPosition = Vector3.Lerp(startPosition, targetPosition, progress);
+            namePopUp.transform.localScale = Vector3.one * MapManager.I.FloatLerp(0.0f, 0.2f, progress);
+
+            if (t > duration) break;
+            yield return null;
+        }
+
+        popUPCoroutine = null;
     }
 }
