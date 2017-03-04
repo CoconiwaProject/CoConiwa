@@ -13,6 +13,8 @@ public class UnderBerMenu : MonoBehaviour
     [SerializeField]
     Image fade = null;
 
+    AudioSource m_audioSource;
+
     Coroutine fadeCoroutine;
     Coroutine transitionCoroutine;
 
@@ -31,6 +33,7 @@ public class UnderBerMenu : MonoBehaviour
 
         DontDestroyOnLoad(transform.parent.gameObject);
         m_Icons.AddRange(transform.GetComponentsInChildren<Button>());
+        m_audioSource = GetComponent<AudioSource>();
         StartCoroutine(FadeOut(2.0f));
     }
 
@@ -78,6 +81,7 @@ public class UnderBerMenu : MonoBehaviour
         if (fadeCoroutine != null) return;
 
         transitionCoroutine = StartCoroutine(SceneTransition(m_TransitionTime, loadSceneName));
+        m_audioSource.Play();
     }
 
     IEnumerator SceneTransition(float transitionTime, string loadSceneName)
