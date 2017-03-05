@@ -12,7 +12,9 @@ public class SpriteAccelerationMove : MonoBehaviour
     [SerializeField]
     float xMinimum = -500.0f;
 
-
+    [SerializeField]
+    float m_Speed = 0.5f;
+    
     float m_sideAcceleration = 0.0f;
 
 	// Use this for initialization
@@ -31,7 +33,7 @@ public class SpriteAccelerationMove : MonoBehaviour
     {
         if (Mathf.Abs(Input.acceleration.x) < Threshold) return;
 
-        m_sideAcceleration += Input.acceleration.x;
+        m_sideAcceleration += Input.acceleration.x*m_Speed;
 
         transform.localPosition += new Vector3(m_sideAcceleration,0,0);
 
