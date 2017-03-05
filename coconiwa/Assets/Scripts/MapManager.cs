@@ -20,6 +20,7 @@ public class MapManager : MonoBehaviour
 
     List<MapMaker> makerList = new List<MapMaker>();
     MapMaker currentMaker;
+    public Sprite notFindImage = null;
 
     bool isTap = false;
 

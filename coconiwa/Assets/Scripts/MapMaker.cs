@@ -12,7 +12,9 @@ public class MapMaker : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("GetContents" + fileID) == 0)
         {
-            gameObject.SetActive(false);
+            //このマーカーはまだ見つけていないマーカー
+            GetComponent<Image>().sprite = MapManager.I.notFindImage;
+            GetComponent<Button>().enabled = false;
         }
     }
 
