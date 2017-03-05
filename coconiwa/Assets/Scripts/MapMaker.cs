@@ -54,7 +54,7 @@ public class MapMaker : MonoBehaviour
 
     IEnumerator PopUp(Image namePopUp)
     {
-        float duration = 0.5f;
+        float duration = 0.3f;
         float t = 0.0f;
         float progress = 0.0f;
         Vector2 startPosition = GetComponent<RectTransform>().anchoredPosition;
