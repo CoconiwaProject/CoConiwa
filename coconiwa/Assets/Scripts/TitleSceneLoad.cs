@@ -25,7 +25,7 @@ public class TitleSceneLoad : MonoBehaviour
             if (t >= duration) break;
             yield return null;
         }
-        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(SceneName);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(SceneName);
         yield return null;
     }
 }

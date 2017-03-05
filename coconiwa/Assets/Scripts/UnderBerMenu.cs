@@ -34,7 +34,7 @@ public class UnderBerMenu : MonoBehaviour
         DontDestroyOnLoad(transform.parent.gameObject);
         m_Icons.AddRange(transform.GetComponentsInChildren<Button>());
         m_audioSource = GetComponent<AudioSource>();
-        StartCoroutine(FadeOut(2.0f));
+        //StartCoroutine(FadeOut(2.0f));
     }
 
     private void OnLevelWasLoaded(int level)
@@ -128,7 +128,7 @@ public class UnderBerMenu : MonoBehaviour
         {
             t += Time.deltaTime;
             //fade.fillAmount = 1.0f - t;
-            fade.color = fade.color = new Color(1, 1, 1, 1.0f-(t / transitionTime));
+            fade.color  = new Color(1, 1, 1, 1.0f-(t / transitionTime));
 
             if (t > transitionTime) break;
             yield return null;
