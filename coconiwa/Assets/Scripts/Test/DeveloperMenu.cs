@@ -16,6 +16,8 @@ public class DeveloperMenu : MonoBehaviour
     GameObject content = null;
     [SerializeField]
     GameObject developMenu = null;
+    [SerializeField]
+    GameObject workSheetManager = null;
 
 
     public void Open()
@@ -67,4 +69,17 @@ public class DeveloperMenu : MonoBehaviour
 
         popUpCoroutine = null;
     }
+
+    public void StartWorkSheet()
+    {
+        content.gameObject.SetActive(false);
+        workSheetManager.SetActive(true);
+        workSheetManager.GetComponent<WorkSheetManager>().Initialize();
+    }
+    public void EndWorkSheet()
+    {
+        content.gameObject.SetActive(true);
+        workSheetManager.SetActive(false);
+    }
+
 }
