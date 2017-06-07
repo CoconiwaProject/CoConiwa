@@ -11,7 +11,7 @@ public class WorkSheetManager : MonoBehaviour
     GameObject endButton = null;
 
     Text nextButton, backButton, titleText;
-    
+
 
     //どの選択肢が採用されるかわからないので消すのが容易なように分ける
     GameObject choices_five = null;
@@ -21,6 +21,8 @@ public class WorkSheetManager : MonoBehaviour
 
     //記述式用
     InputField inputField = null;
+
+    Dropdown dropDown = null;
 
     [SerializeField]
     WorkSheetData workSheetData = null;
@@ -35,15 +37,16 @@ public class WorkSheetManager : MonoBehaviour
 
     void Awake()
     {
-        choices_five = transform.FindChild("Choices_Five").gameObject;
-        choices_four = transform.FindChild("Choices_Four").gameObject;
-        choices_three = transform.FindChild("Choices_Three").gameObject;
-        choices_two = transform.FindChild("Choices_Two").gameObject;
-        inputField = transform.FindChild("InputField").GetComponent<InputField>();
+        choices_five = transform.Find("Choices_Five").gameObject;
+        choices_four = transform.Find("Choices_Four").gameObject;
+        choices_three = transform.Find("Choices_Three").gameObject;
+        choices_two = transform.Find("Choices_Two").gameObject;
+        inputField = transform.Find("InputField").GetComponent<InputField>();
+        dropDown = transform.Find("Dropdown").GetComponent<Dropdown>();
 
-        nextButton = transform.FindChild("NextButton").GetComponent<Text>();
-        backButton = transform.FindChild("BackButton").GetComponent<Text>();
-        titleText = transform.FindChild("TitleText").GetComponent<Text>();
+        nextButton = transform.Find("NextButton").GetComponent<Text>();
+        backButton = transform.Find("BackButton").GetComponent<Text>();
+        titleText = transform.Find("TitleText").GetComponent<Text>();
     }
 
     public void Initialize()
@@ -55,7 +58,7 @@ public class WorkSheetManager : MonoBehaviour
 
         answer = new WorkSheetAnswer(workSheetData);
 
-        for(int i = 0;i< workSheetData.questionList.Count;i++)
+        for (int i = 0; i < workSheetData.questionList.Count; i++)
         {
             workSheetData.questionList[i].isAnswered = false;
         }
@@ -69,7 +72,6 @@ public class WorkSheetManager : MonoBehaviour
     {
         //回答を保存する
         string answerText = GetAnswer();
-
         if (answerText == "") return;
         currentQuestion.isAnswered = true;
         answer.SetAnswer(currentQuestionIndex, answerText);
@@ -88,14 +90,7 @@ public class WorkSheetManager : MonoBehaviour
 
     public void Back()
     {
-        //今出ているものをいったん消す
-        choices_five.SetActive(false);
-        choices_four.SetActive(false);
-        choices_three.SetActive(false);
-        choices_two.SetActive(false);
-        inputField.gameObject.SetActive(false);
-
-        //次の問題
+        //前の問題
         currentQuestionIndex--;
         SetQuestion(workSheetData.questionList[currentQuestionIndex]);
     }
@@ -138,6 +133,13 @@ public class WorkSheetManager : MonoBehaviour
             inputField.gameObject.SetActive(true);
             return;
         }
+        if (currentQuestion.m_type == QuestionType.DropDown)
+        {
+            if (currentQuestion.isAnswered) dropDown.value = int.Parse(answer.GetAnswer(currentQuestionIndex));
+            else dropDown.value = 0;
+            dropDown.gameObject.SetActive(true);
+            SetDropDown();
+        }
         if (currentQuestion.m_type == QuestionType.Choices_Five)
             ShowTggle(choices_five);
         if (currentQuestion.m_type == QuestionType.Choices_Four)
@@ -166,19 +168,32 @@ public class WorkSheetManager : MonoBehaviour
         }
 
         if (!currentQuestion.isAnswered) return;
-        for(int i = 0;i< toggleList.Count;i++)
+        for (int i = 0; i < toggleList.Count; i++)
         {
-            if(toggleList[i].GetComponentInChildren<Text>().text == answer.GetAnswer(currentQuestionIndex))
+            if (toggleList[i].GetComponentInChildren<Text>().text == answer.GetAnswer(currentQuestionIndex))
             {
                 toggleList[i].isOn = true;
             }
         }
     }
 
+    void SetDropDown()
+    {
+        dropDown.ClearOptions();
+        List<Dropdown.OptionData> tempList = new List<Dropdown.OptionData>();
+        for (int i = 0; i < currentQuestion.choiceArray.Length; i++)
+        {
+            Dropdown.OptionData data = new Dropdown.OptionData(currentQuestion.choiceArray[i]);
+            tempList.Add(data);
+        }
+
+        dropDown.AddOptions(tempList);
+    }
+
     //解答欄を消す
     void ClearChoices()
     {
-        for(int i = 0;i< toggleList.Count;i++)
+        for (int i = 0; i < toggleList.Count; i++)
         {
             toggleList[i].isOn = false;
         }
@@ -189,6 +204,7 @@ public class WorkSheetManager : MonoBehaviour
         choices_three.SetActive(false);
         choices_two.SetActive(false);
         inputField.gameObject.SetActive(false);
+        dropDown.gameObject.SetActive(false);
     }
 
     string GetAnswer()
@@ -196,6 +212,10 @@ public class WorkSheetManager : MonoBehaviour
         if (currentQuestion.m_type == QuestionType.Writing)
         {
             return inputField.text;
+        }
+        else if (currentQuestion.m_type == QuestionType.DropDown)
+        {
+            return dropDown.value.ToString();
         }
         else
         {

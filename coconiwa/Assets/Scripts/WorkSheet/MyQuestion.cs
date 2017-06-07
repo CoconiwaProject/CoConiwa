@@ -1,4 +1,4 @@
-﻿public enum QuestionType { Writing, Choices_Five = 5, Choices_Four = 4, Choices_Three = 3, Choices_Two = 2 }
+﻿public enum QuestionType { Writing, DropDown, Choices_Five = 5, Choices_Four = 4, Choices_Three = 3, Choices_Two = 2 }
 
 [System.Serializable]
 public class MyQuestion
@@ -13,5 +13,5 @@ public class MyQuestion
     /// <summary>
     /// 選択式の場合の選択肢
     /// </summary>
-    public string[] choiceArray = new string[5];
+    public string[] choiceArray;
 }
