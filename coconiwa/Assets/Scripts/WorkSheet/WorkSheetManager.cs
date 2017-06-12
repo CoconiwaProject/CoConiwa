@@ -58,23 +58,50 @@ public class WorkSheetManager : MonoBehaviour
 
         answer = new WorkSheetAnswer(workSheetData);
 
-        for (int i = 0; i < workSheetData.questionList.Count; i++)
+        Load();
+
+        //最初の質問をセットする
+
+        SetQuestion(workSheetData.questionList[currentQuestionIndex]);
+    }
+
+    //中断されていた場合はロードする
+    void Load()
+    {
+        int answerNum = PlayerPrefs.GetInt("currentQuestionIndex");
+        if(answerNum == 0)
+        {
+            currentQuestionIndex = 0;
+        }
+        else
+        {
+            currentQuestionIndex = answerNum + 1;
+        }
+        
+        Debug.Log("answerNum = " + answerNum);
+
+        for (int i = 0; i < answerNum; i++)
+        {
+            workSheetData.questionList[i].isAnswered = true;
+
+            answer.SetAnswer(i, PlayerPrefs.GetString("answer"+ i.ToString()));
+        }
+        for (int i = answerNum; i < workSheetData.questionList.Count; i++)
         {
             workSheetData.questionList[i].isAnswered = false;
         }
-
-        //最初の質問をセットする
-        currentQuestionIndex = 0;
-        SetQuestion(workSheetData.questionList[0]);
     }
 
     public void Next()
     {
-        //回答を保存する
         string answerText = GetAnswer();
         if (answerText == "") return;
         currentQuestion.isAnswered = true;
+        //回答を保存する
         answer.SetAnswer(currentQuestionIndex, answerText);
+        PlayerPrefs.SetInt("currentQuestionIndex", currentQuestionIndex);
+        Debug.Log("save answer" + currentQuestionIndex.ToString() + " = " + answerText);
+        PlayerPrefs.SetString("answer" + currentQuestionIndex.ToString(), answerText);
 
         if (currentQuestionIndex + 1 >= workSheetData.questionList.Count)
         {
@@ -211,6 +238,7 @@ public class WorkSheetManager : MonoBehaviour
     {
         if (currentQuestion.m_type == QuestionType.Writing)
         {
+            if (inputField.text == "") return "　";
             return inputField.text;
         }
         else if (currentQuestion.m_type == QuestionType.DropDown)
@@ -235,9 +263,11 @@ public class WorkSheetManager : MonoBehaviour
         backButton.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
         titleText.gameObject.SetActive(false);
-        questionText.text = "解答ありがとうございました。";
+        questionText.text = "回答ありがとうございました。";
         ClearChoices();
         answer.SaveAnswer();
         endButton.SetActive(true);
+
+
     }
 }
