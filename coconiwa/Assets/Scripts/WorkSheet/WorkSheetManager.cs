@@ -69,22 +69,19 @@ public class WorkSheetManager : MonoBehaviour
     void Load()
     {
         int answerNum = PlayerPrefs.GetInt("currentQuestionIndex");
-        if(answerNum == 0)
+        if (answerNum == 0)
         {
             currentQuestionIndex = 0;
         }
         else
         {
-            currentQuestionIndex = answerNum + 1;
+            currentQuestionIndex = answerNum;
         }
-        
-        Debug.Log("answerNum = " + answerNum);
 
         for (int i = 0; i < answerNum; i++)
         {
             workSheetData.questionList[i].isAnswered = true;
-
-            answer.SetAnswer(i, PlayerPrefs.GetString("answer"+ i.ToString()));
+            answer.SetAnswer(i, PlayerPrefs.GetString("answer" + i.ToString()));
         }
         for (int i = answerNum; i < workSheetData.questionList.Count; i++)
         {
@@ -99,8 +96,7 @@ public class WorkSheetManager : MonoBehaviour
         currentQuestion.isAnswered = true;
         //回答を保存する
         answer.SetAnswer(currentQuestionIndex, answerText);
-        PlayerPrefs.SetInt("currentQuestionIndex", currentQuestionIndex);
-        Debug.Log("save answer" + currentQuestionIndex.ToString() + " = " + answerText);
+        PlayerPrefs.SetInt("currentQuestionIndex", currentQuestionIndex + 1);
         PlayerPrefs.SetString("answer" + currentQuestionIndex.ToString(), answerText);
 
         if (currentQuestionIndex + 1 >= workSheetData.questionList.Count)
@@ -268,6 +264,11 @@ public class WorkSheetManager : MonoBehaviour
         answer.SaveAnswer();
         endButton.SetActive(true);
 
-
+        //PlayerPrefsは消す
+        PlayerPrefs.DeleteKey("currentQuestionIndex");
+        for(int i = 0;i < workSheetData.questionList.Count;i++)
+        {
+            PlayerPrefs.DeleteKey("answer" + i.ToString());
+        }
     }
 }
