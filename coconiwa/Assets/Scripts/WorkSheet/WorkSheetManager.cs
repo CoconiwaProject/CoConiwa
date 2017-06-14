@@ -245,7 +245,7 @@ public class WorkSheetManager : MonoBehaviour
         {
             for (int i = 0; i < toggleList.Count; i++)
             {
-                if (toggleList[i].isOn) return toggleList[i].GetComponentInChildren<Text>().text;
+                if (toggleList[i].isOn) return toggleList[i].gameObject.name;
             }
         }
 

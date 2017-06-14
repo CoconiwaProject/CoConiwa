@@ -9,7 +9,6 @@ public class WorkSheetAnswer
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    /// <param name="index">何人目か？</param>
     public WorkSheetAnswer(WorkSheetData workSheetData)
     {
         answers = new string[workSheetData.questionList.Count];
