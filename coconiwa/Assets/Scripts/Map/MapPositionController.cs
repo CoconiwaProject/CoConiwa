@@ -9,15 +9,13 @@ public class MapPositionController : MonoBehaviour
 
     //キャッシュ
     Vector3 zeroVec = Vector3.zero;
-    [SerializeField]
     Vector3 swipeVec = Vector3.zero;
     float swipeSpeed = 0.2f;
 
     //慣性
-    [SerializeField]
     Vector3 inerVec = Vector3.zero;
     //どの程度完成の影響を受けるか
-    float inerPow = 1.0f;
+    float inerPow = 0.7f;
     float minimumIner = 2.0f;
 
     //摩擦
