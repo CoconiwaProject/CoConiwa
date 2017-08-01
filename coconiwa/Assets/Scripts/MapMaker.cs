@@ -20,8 +20,10 @@ public class MapMaker : MonoBehaviour
 
     public void Touch()
     {
+        Debug.Log("call touch");
         if (IsSelect)
         {
+            Debug.Log("call map scene load");
             MapSceneLoad();
             return;
         }
