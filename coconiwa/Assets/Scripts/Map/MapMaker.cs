@@ -69,7 +69,7 @@ public class MapMaker : MonoBehaviour
             progress = t / duration;
             progress *= progress;
             namePopUp.rectTransform.anchoredPosition = Vector3.Lerp(startPosition, targetPosition, progress);
-            namePopUp.transform.localScale = Vector3.one * MapManager.I.FloatLerp(0.0f, 0.2f, progress);
+            namePopUp.transform.localScale = Vector3.one * Mathf.Lerp(0.0f, 0.2f, progress);
 
             if (t > duration) break;
             yield return null;
