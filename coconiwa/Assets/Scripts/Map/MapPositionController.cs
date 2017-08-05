@@ -14,7 +14,7 @@ public class MapPositionController : MonoBehaviour
 
     //慣性
     Vector3 inerVec = Vector3.zero;
-    //どの程度完成の影響を受けるか
+    //どの程度慣性の影響を受けるか
     float inerPow = 0.7f;
     float minimumIner = 2.0f;
 
@@ -68,7 +68,7 @@ public class MapPositionController : MonoBehaviour
         }
 
         imageRect.pivot = imagePivot;
-        imageRect.localPosition = Vector2.zero;
+        imageRect.localPosition = zeroVec;
 
         //毎回ゼロを入れる
         swipeVec = zeroVec;
