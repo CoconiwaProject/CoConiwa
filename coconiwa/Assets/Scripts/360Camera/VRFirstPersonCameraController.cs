@@ -3,39 +3,40 @@
 public class VRFirstPersonCameraController : MonoBehaviour
 {
     Quaternion gyro;
+	Transform m_transform;
 
-    [SerializeField]
+	#if UNITY_EDITOR
     float longitude = 0.0f;
-    [SerializeField]
     float latitude = 0.0f;
-
-    [SerializeField]
-    float speed = 0.5f;
-
+	[SerializeField]
+    float speed = 20.0f;
     bool canMouseControl = false;
-
+	//キャッシュ
     Vector3 zeroVec = Vector3.zero;
-
+	#endif
     void Start()
     {
         Input.gyro.enabled = true;
+		m_transform = transform;
     }
 
     void Update()
     {
-        if (Application.isEditor)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape)) ChangeMouseControl();
-            EditorCameraController();
-            return;
-        }
+		
+#if UNITY_EDITOR
+		if (Input.GetKeyDown(KeyCode.Escape)) ChangeMouseControl();
+        EditorCameraController();
+        return;
+#else
         if (!Input.gyro.enabled) return;
         gyro = Input.gyro.attitude;
         //ジャイロはデフォルトで下を向いているので90度修正。X軸もY軸も逆のベクトルに変換
         gyro = Quaternion.Euler(90.0f, 0.0f, 0.0f) * (new Quaternion(-gyro.x, -gyro.y, gyro.z, gyro.w));
-        transform.localRotation = gyro;
+		m_transform.localRotation = gyro;
+#endif
     }
 
+	#if UNITY_EDITOR
     void EditorCameraController()
     {
         Vector2 input = GetKeyInputVector();
@@ -102,4 +103,6 @@ public class VRFirstPersonCameraController : MonoBehaviour
 
         return position;
     }
+
+	#endif
 }
