@@ -52,6 +52,6 @@ public class SceneLoadAttach : MonoBehaviour
     public void MapSceneLoad(string FileID)
     {
         AppData.SelectTargetName = FileID;
-        GameObject.Find("Canvas2").GetComponentInChildren<UnderBerMenu>().ChangeScene("Content");
+        UnderBerMenu.I.ChangeScene("Content");
     }
 }

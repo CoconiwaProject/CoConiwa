@@ -51,7 +51,7 @@ public class MapMaker : MonoBehaviour
     void MapSceneLoad()
     {
         AppData.SelectTargetName = fileID;
-        GameObject.Find("Canvas2").GetComponentInChildren<UnderBerMenu>().ChangeScene("Content");
+        UnderBerMenu.I.ChangeScene("Content");
     }
 
     IEnumerator PopUp(Image namePopUp)

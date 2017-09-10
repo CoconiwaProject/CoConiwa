@@ -24,7 +24,7 @@ public class NamePopUp : MonoBehaviour
     public void MapSceneLoad()
     {
         AppData.SelectTargetName = fileID;
-        GameObject.Find("Canvas2").GetComponentInChildren<UnderBerMenu>().ChangeScene("Content");
+        UnderBerMenu.I.ChangeScene("Content");
     }
 
     void SetPopUpTexture(MakerType type, MakerSize size)

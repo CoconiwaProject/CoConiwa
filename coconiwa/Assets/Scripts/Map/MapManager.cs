@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MapManager : MonoBehaviour
+public class MapManager : SingletonMonoBehaviour<MapManager>
 {
     public float screenSizeRate = 1.0f;
 
@@ -15,29 +16,25 @@ public class MapManager : MonoBehaviour
     List<Image> namePopUpList = new List<Image>();
     public List<Sprite> balloonImageList = new List<Sprite>();
 
-    public static MapManager I = null;
-
     List<MapMaker> makerList = new List<MapMaker>();
     MapMaker currentMaker;
     public Sprite notFindImage = null;
 
     bool isTap = false;
 
-    void Awake()
-    {
-        if (I != null)
-        {
-            Destroy(I);
-            return;
-        }
+    public Action OnTapped;
+    float startDraggingTime = 0.0f;
 
-        I = this;
+    protected override void Awake()
+    {
+        base.Awake();
         //とりあえず横だけ
         screenSizeRate = 1.0f + (1.0f - ((float)Screen.width / 1080));
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         List<GameObject> tempList = new List<GameObject>();
         tempList.AddRange(GameObject.FindGameObjectsWithTag("Maker"));
         for (int i = 0; i < tempList.Count; i++)
@@ -48,14 +45,17 @@ public class MapManager : MonoBehaviour
         TouchManager.Instance.TouchStart += OnTouchStart;
     }
 
-#if UNITY_EDITOR
-#else
-    void OnDestroy()
+
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+        OnTapped = null;
+#if !UNITY_EDITOR
         TouchManager.Instance.TouchEnd -= OnTouchEnd;
         TouchManager.Instance.TouchStart -= OnTouchStart;
-    }
 #endif
+    }
+
 
     public string GetContentName(string name)
     {
@@ -68,7 +68,7 @@ public class MapManager : MonoBehaviour
 
     public void TouchMaker(string fileID, MapMaker maker)
     {
-        isTap = false;
+        TappedTheButton();
         currentMaker = maker;
         for (int i = 0; i < makerList.Count; i++)
         {
@@ -84,20 +84,30 @@ public class MapManager : MonoBehaviour
         namePopUp = namePopUpList[index];
     }
 
+    public void TappedTheButton()
+    {
+        isTap = false;
+    }
+
     void OnTouchStart(object sender, CustomInputEventArgs e)
     {
         isTap = true;
+
+        startDraggingTime = Time.time;
     }
 
     void OnTouchEnd(object sender, CustomInputEventArgs e)
     {
         //スワイプを検出されていればisTapはfalseになる
-        if (isTap) Tapped();
-    }
+        if (Time.time - startDraggingTime > 0.2f) return;
+        if (!isTap) return;
 
-    //タップされた(スワイプ時には呼ばれない予定)
+        Tapped();
+    }
+    
     void Tapped()
     {
+        if (OnTapped != null) OnTapped.Invoke();
         if (currentMaker == null) return;
         if (!currentMaker.IsSelect) return;
 

@@ -4,10 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class UnderBerMenu : MonoBehaviour
+public class UnderBerMenu : SingletonMonoBehaviour<UnderBerMenu>
 {
-    public static UnderBerMenu I;
-
     List<Button> m_Icons = new List<Button>();
 
     [SerializeField]
@@ -21,20 +19,12 @@ public class UnderBerMenu : MonoBehaviour
     float m_TransitionTime = 0.3f;
 
     // Use this for initialization
-    void Start()
+    protected override void Start()
     {
-        if(I != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        I = this;
-
+        base.Start();
         DontDestroyOnLoad(transform.parent.gameObject);
         m_Icons.AddRange(transform.GetComponentsInChildren<Button>());
         m_audioSource = GetComponent<AudioSource>();
-        //StartCoroutine(FadeOut(2.0f));
     }
 
     private void OnLevelWasLoaded(int level)
@@ -70,12 +60,6 @@ public class UnderBerMenu : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void ChangeScene(string loadSceneName)
     {
         if (fadeCoroutine != null) return;
@@ -103,38 +87,28 @@ public class UnderBerMenu : MonoBehaviour
         transitionCoroutine = null;
     }
 
-    IEnumerator FadeIn(float transitionTime)
+    Color clearColor = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+    Color whiteColor = Color.white;
+
+    MyCoroutine FadeIn(float transitionTime)
     {
         fade.gameObject.SetActive(true);
-        float t = 0.0f;
-
-        while (true)
-        {
-            t += Time.deltaTime;
-            fade.color =new Color(1,1,1,(t/transitionTime));
-
-            if (t > transitionTime) break;
-            yield return null;
-        }
-
-        fadeCoroutine = null;
+        return FadeAnimation(clearColor, whiteColor, transitionTime);
     }
 
-    IEnumerator FadeOut(float transitionTime)
+    MyCoroutine FadeOut(float transitionTime)
     {
-        float t = 0.0f;
+        return FadeAnimation(whiteColor, clearColor, transitionTime).OnCompleted(() => fade.gameObject.SetActive(false));
+    }
 
-        while (true)
+    MyCoroutine FadeAnimation(Color startColor, Color endColor, float duration)
+    {
+        return KKUtilities.FloatLerp(duration, (t) =>
         {
-            t += Time.deltaTime;
-            //fade.fillAmount = 1.0f - t;
-            fade.color  = new Color(1, 1, 1, 1.0f-(t / transitionTime));
-
-            if (t > transitionTime) break;
-            yield return null;
-        }
-
-        fade.gameObject.SetActive(false);
-        fadeCoroutine = null;
+            fade.color = Color.Lerp(startColor, endColor, t);
+        }).OnCompleted(() =>
+        {
+            fadeCoroutine = null;
+        });
     }
 }
