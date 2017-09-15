@@ -16,5 +16,5 @@ public class ContentsData : ScriptableObject
         public string ContentsText;
     }
 
-    public List<Params> Elements;
+    public List<Params> Elements=new List<Params>();
 }

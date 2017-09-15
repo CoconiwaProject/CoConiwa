@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 public class TitleSceneLoad : MonoBehaviour
 {
-
     public Image Panel;
     public string SceneName;
     public float duration = 1.0f;
@@ -25,7 +24,9 @@ public class TitleSceneLoad : MonoBehaviour
             if (t >= duration) break;
             yield return null;
         }
-        UnityEngine.SceneManagement.SceneManager.LoadScene(SceneName);
+        if (!PlayerPrefs.HasKey("Init"))
+            SceneName = "Tutorial";
+            UnityEngine.SceneManagement.SceneManager.LoadScene(SceneName);
         yield return null;
     }
 }
