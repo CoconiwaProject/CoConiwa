@@ -26,6 +26,7 @@ public class CSVImpoter : AssetPostprocessor
             {
                 data = ScriptableObject.CreateInstance<ContentsData>();
                 AssetDatabase.CreateAsset((ScriptableObject)data, exportFile);
+                AssetDatabase.SaveAssets();
             }
             else
             {
