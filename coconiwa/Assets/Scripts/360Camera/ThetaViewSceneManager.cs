@@ -5,21 +5,13 @@ using UnityEngine;
 public class ThetaViewSceneManager : SingletonMonoBehaviour<ThetaViewSceneManager>
 {
     [SerializeField]
-    Renderer sphereRenderer = null;
-
-    [SerializeField]
-    GameObject pictureChanger = null;
+    ThetaPictureChanger pictureChanger = null;
 
     protected override void Start()
     {
         base.Start();
 
-        ChangePicture(AppData.SelectThetaPictures[0]);
-        pictureChanger.SetActive(AppData.CanChangePicture);
-    }
-
-    public void ChangePicture(Texture tex)
-    {
-        sphereRenderer.material.mainTexture = tex;
+        pictureChanger.SetPicture(AppData.SelectThetaPictures[0]);
+        pictureChanger.gameObject.SetActive(AppData.CanChangePicture);
     }
 }
