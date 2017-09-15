@@ -1,12 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-[RequireComponent(typeof(Button))]
 public class ThetaPictureChanger : MonoBehaviour
 {
+    enum SelectDirection { Left, Right }
+    enum DragState { NearImage, FarImage }
+
+    [SerializeField]
+    Button button = null;
+    RectTransform buttonRect;
+
     [SerializeField]
     RectTransform leftTextRec = null;
 
@@ -14,51 +19,135 @@ public class ThetaPictureChanger : MonoBehaviour
     RectTransform rightTextRec = null;
 
     [SerializeField]
-    RectTransform selectMaker = null;
+    RectTransform selectMakerRec = null;
+    Image selectMakerImage;
 
     [SerializeField]
     Renderer sphereRenderer = null;
+    [SerializeField]
+    Color draggingColor = new Color(0.8f, 0.8f, 0.8f);
 
-    Button button;
-    bool isLeft = true;
+    SelectDirection currentSelectDirection = SelectDirection.Left;
     Coroutine positionControlCoroutine;
 
-    void Awake()
-    {
-        button = GetComponent<Button>();
-    }
+    float dragLimitX;
+    float dragLimitY;
+
+    bool canDragging = true;
+
+    Camera mainCamera;
 
     void Start()
     {
         if (!AppData.CanChangePicture) return;
 
-        button.onClick.AddListener(() => ChangePicture());
+        button.onClick.AddListener(() =>
+        {
+            //反転
+            SelectDirection direction = currentSelectDirection == SelectDirection.Left ? SelectDirection.Right : SelectDirection.Left;
+            ChangeDirection(direction, () => ChangePicture(direction));
+        });
+
+        EventTrigger trigger = selectMakerRec.gameObject.AddComponent<EventTrigger>();
+
+        EventTrigger.Entry onStartDrag = new EventTrigger.Entry();
+        onStartDrag.eventID = EventTriggerType.BeginDrag;
+        onStartDrag.callback.AddListener(OnStartDrag);
+        trigger.triggers.Add(onStartDrag);
+
+        EventTrigger.Entry onDrag = new EventTrigger.Entry();
+        onDrag.eventID = EventTriggerType.Drag;
+        onDrag.callback.AddListener(OnDrag);
+        trigger.triggers.Add(onDrag);
+
+        EventTrigger.Entry onEndDrag = new EventTrigger.Entry();
+        onEndDrag.eventID = EventTriggerType.EndDrag;
+        onEndDrag.callback.AddListener(OnPointerUp);
+        trigger.triggers.Add(onEndDrag);
+
+        selectMakerImage = selectMakerRec.GetComponent<Image>();
+        buttonRect = button.transform as RectTransform;
+
+        Vector2 targetImageSize = button.GetComponent<RectTransform>().sizeDelta * button.transform.lossyScale.x;
+        dragLimitX = targetImageSize.x;
+        dragLimitY = targetImageSize.y;
+    }
+
+    void OnStartDrag(BaseEventData data)
+    {
+        selectMakerImage.color = draggingColor;
+    }
+
+    void OnDrag(BaseEventData data)
+    {
+        if (!canDragging) return;
+
+        Vector2 touchPosition;
+#if UNITY_EDITOR
+        touchPosition = Input.mousePosition;
+#else
+        touchPosition = Input.GetTouch(0).position;
+#endif
+        Vector2 diff;
+        diff.x = buttonRect.position.x - touchPosition.x;
+        diff.y = buttonRect.position.y - touchPosition.y;
+
+        if (Mathf.Abs(buttonRect.position.x - touchPosition.x) > dragLimitX
+            || Mathf.Abs(buttonRect.position.y - touchPosition.y) > dragLimitY)
+        {
+            canDragging = false;
+            selectMakerImage.color = Color.white;
+            return;
+        }
+
+        SelectDirection direction;
+
+        direction = touchPosition.x < buttonRect.position.x ? SelectDirection.Left : SelectDirection.Right;
+
+        ChangeDirection(direction);
+    }
+
+    void OnPointerUp(BaseEventData data)
+    {
+        ChangePicture(currentSelectDirection);
+        selectMakerImage.color = Color.white;
+        canDragging = true;
     }
 
     MyCoroutine ChangeSelectMakerPosition(Vector2 targetPosition)
     {
-        Vector2 startPosition = selectMaker.anchoredPosition;
+        Vector2 startPosition = selectMakerRec.anchoredPosition;
 
         return KKUtilities.FloatLerp(0.2f, (t) =>
         {
-            selectMaker.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, t);
+            selectMakerRec.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, t);
         }).OnCompleted(() => positionControlCoroutine = null);
     }
 
-    void ChangePicture()
+    void ChangeDirection(SelectDirection direction, Action callback = null)
     {
-        //反転
-        isLeft = !isLeft;
+        if (currentSelectDirection == direction) return;
 
-        if(positionControlCoroutine != null)
+        if (positionControlCoroutine != null)
         {
             StopCoroutine(positionControlCoroutine);
         }
 
-        positionControlCoroutine = StartCoroutine(ChangeSelectMakerPosition(isLeft ? leftTextRec.anchoredPosition : rightTextRec.anchoredPosition).OnCompleted(() =>{
-                SetPicture(AppData.SelectThetaPictures[isLeft ? 0 : 1]);
-        }));
+        currentSelectDirection = direction;
+        Vector2 targetPosition = currentSelectDirection == SelectDirection.Left ? leftTextRec.anchoredPosition : rightTextRec.anchoredPosition;
 
+        positionControlCoroutine = StartCoroutine(ChangeSelectMakerPosition(targetPosition).OnCompleted(() =>
+        {
+            positionControlCoroutine = null;
+            if (callback != null) callback.Invoke();
+        }));
+    }
+
+    void ChangePicture(SelectDirection direction)
+    {
+        Texture picture = AppData.SelectThetaPictures[direction == SelectDirection.Left ? 0 : 1];
+
+        SetPicture(picture);
     }
 
     public void SetPicture(Texture tex)
