@@ -14,9 +14,14 @@ public class ThetaPictureChanger : MonoBehaviour
 
     [SerializeField]
     RectTransform leftTextRec = null;
-
+    
     [SerializeField]
     RectTransform rightTextRec = null;
+
+    Text leftText;
+    Text rightText;
+    Color defaultTextColor;
+    Color selectTextColor = Color.white;
 
     [SerializeField]
     RectTransform selectMakerRec = null;
@@ -71,6 +76,11 @@ public class ThetaPictureChanger : MonoBehaviour
         Vector2 targetImageSize = button.GetComponent<RectTransform>().sizeDelta * button.transform.lossyScale.x;
         dragLimitX = targetImageSize.x;
         dragLimitY = targetImageSize.y;
+
+        leftText = leftTextRec.GetComponent<Text>();
+        rightText = rightTextRec.GetComponent<Text>();
+        defaultTextColor = rightText.color;
+        leftText.color = selectTextColor;
     }
 
     void OnStartDrag(BaseEventData data)
@@ -135,10 +145,11 @@ public class ThetaPictureChanger : MonoBehaviour
 
         currentSelectDirection = direction;
         Vector2 targetPosition = currentSelectDirection == SelectDirection.Left ? leftTextRec.anchoredPosition : rightTextRec.anchoredPosition;
-
+        
         positionControlCoroutine = StartCoroutine(ChangeSelectMakerPosition(targetPosition).OnCompleted(() =>
         {
             positionControlCoroutine = null;
+            ChangeTextColor(currentSelectDirection);
             if (callback != null) callback.Invoke();
         }));
     }
@@ -153,5 +164,19 @@ public class ThetaPictureChanger : MonoBehaviour
     public void SetPicture(Texture tex)
     {
         sphereRenderer.material.mainTexture = tex;
+    }
+
+    void ChangeTextColor(SelectDirection direction)
+    {
+        if (direction == SelectDirection.Left)
+        {
+            leftText.color = selectTextColor;
+            rightText.color = defaultTextColor;
+        }
+        else
+        {
+            leftText.color = defaultTextColor;
+            rightText.color = selectTextColor;
+        }
     }
 }
