@@ -4,9 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoadAttach : MonoBehaviour
 {
-
     [SerializeField]
-    string LoadSceneName;
+    string LoadSceneName = "";
 
     [SerializeField]
     bool isTransition = true;
@@ -14,41 +13,17 @@ public class SceneLoadAttach : MonoBehaviour
     public void LoadSceneAsync()
     {
         if (isTransition)
-        {
-            UnderBerMenu menu = transform.parent.GetComponent<UnderBerMenu>();
-            if (menu != null)
-            {
-                transform.parent.GetComponent<UnderBerMenu>().ChangeScene(LoadSceneName);
-            }
-            else
-            {
-                UnderBerMenu.I.ChangeScene(LoadSceneName);
-            }
-            return;
-        }
-
-        try
-        {
-            SceneManager.LoadSceneAsync(LoadSceneName);
-        }
-        catch
-        {
-            Debug.Log("LoadSceneNotFound");
-        }
+            UnderBerMenu.I.ChangeScene(LoadSceneName);
+        else
+            SceneLoadManager.I.LoadSceneAsync(LoadSceneName);
     }
 
     public void LoadScene()
     {
-        try
-        {
-            SceneManager.LoadScene(LoadSceneName);
-        }
-        catch
-        {
-            Debug.Log("LoadSceneNotFound");
-        }
+        SceneLoadManager.I.LoadScene(LoadSceneName);
     }
 
+    //todo: ここに書かない
     public void MapSceneLoad(string FileID)
     {
         AppData.SelectTargetName = FileID;

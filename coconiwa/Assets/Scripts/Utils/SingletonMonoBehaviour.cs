@@ -30,7 +30,7 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
         SceneManager.sceneLoaded += WasLoaded;
     }
 
-    void WasLoaded(Scene scneName, LoadSceneMode sceneMode)
+    protected virtual void WasLoaded(Scene sceneName, LoadSceneMode sceneMode)
     {
         Inisialize();
     }

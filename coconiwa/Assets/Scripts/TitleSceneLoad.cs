@@ -10,7 +10,18 @@ public class TitleSceneLoad : MonoBehaviour
 
     public void NextScene()
     {
-        StartCoroutine(IE_NextSceneLoad());
+        if (!PlayerPrefs.HasKey("Init")) SceneName = "Tutorial";
+
+        UnderBerMenu menu = UnderBerMenu.I;
+        //menuをpanelの後ろに持ってくる
+        menu.transform.SetSiblingIndex(0);
+
+        SceneLoadManager.I.SceneTransition(SceneName, () =>{
+            menu.SetUnderBerActive(true);
+        }, () =>{
+            menu.transform.SetSiblingIndex(1);
+        },duration);
+
     }
 
     IEnumerator IE_NextSceneLoad()
