@@ -39,7 +39,7 @@ public class ContentListManager : MonoBehaviour
                 ContentGroupP.contentParams.Add(contentsData.Elements[i]);
 
             }
-            else if (h == 'I')
+            else if (h == 'L')
             {
                 ContentGroupI.contentParams.Add(contentsData.Elements[i]);
             }

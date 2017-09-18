@@ -8,6 +8,9 @@ public class ContentGroup : MonoBehaviour
     [SerializeField]
     ContentListItem ItemPrefab;
 
+    [SerializeField]
+    Sprite itemBGImage;
+
     public List<ContentsData.Params> contentParams = new List<ContentsData.Params>();
 
     public void Create()
@@ -16,6 +19,7 @@ public class ContentGroup : MonoBehaviour
         {
             ContentListItem item =  Instantiate(ItemPrefab, transform);
             item.transform.localPosition = new Vector3((int)(i%3)*350,-(int)(i/3)*100,0);
+            item.BGImage.sprite = itemBGImage;
             item.ContentSet(contentParams[i]);
         }
     }

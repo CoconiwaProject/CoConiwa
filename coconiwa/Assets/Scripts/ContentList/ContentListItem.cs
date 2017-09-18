@@ -10,6 +10,9 @@ public class ContentListItem : MonoBehaviour
     public Text text;
     public Button button;
 
+    public Color activeTextColor;
+    public Color disabeleTextColor;
+
     ContentsData.Params m_params;
 
     //発見フラグ
@@ -26,6 +29,11 @@ public class ContentListItem : MonoBehaviour
         {
             isActive = true;
             button.interactable = true;
+            text.color = activeTextColor;
+        }
+        else
+        {
+            text.color = disabeleTextColor;
         }
 
         text.text = param.ContentsName;
