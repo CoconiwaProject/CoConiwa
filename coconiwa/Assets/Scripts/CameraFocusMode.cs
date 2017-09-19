@@ -45,4 +45,16 @@ public class CameraFocusMode : MonoBehaviour {
         }
     }
 
+    void Update()
+    {
+        foreach (Touch touch in Input.touches)
+        {
+            if (touch.phase == TouchPhase.Began)
+            {
+                CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_TRIGGERAUTO);
+                Debug.Log("focus");
+            }
+        }
+    }
+
 }
