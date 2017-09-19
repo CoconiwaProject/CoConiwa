@@ -235,7 +235,9 @@ public class TutorialManager : MonoBehaviour
     public void OnNextButtone()
     {
         if (nowSelectCount == EndSelectCount - 1)
-            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+        {
+            SceneLoadManager.I.SceneTransition(sceneName, () => UnderBerMenu.I.SetUnderBerActive(true) , ()=> UnderBerMenu.I.transform.SetSiblingIndex(1));
+        }
         else
         {
             //制限つける
