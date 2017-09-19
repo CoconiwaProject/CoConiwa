@@ -29,17 +29,21 @@ public class ContentManager : MonoBehaviour
     [SerializeField]
     Sprite Prants;
 
+    [SerializeField]
+    ContentsTextController contentsTextController;
+
     private int index;
 
     // Use this for initialization
     void Start ()
     {
         index = GetIndex(AppData.SelectTargetName);
+     
         if (index == -1) return;
         m_Image.sprite = Resources.Load<Sprite>(contentsData.Elements[index].FileID);
         ContentName.text = contentsData.Elements[index].ContentsName;
         ContentText.text = contentsData.Elements[index].ContentsText;
-
+        contentsTextController.SetTextInterval();
         char h= contentsData.Elements[index].FileID[0];
 
         //タイプによって画像、色の変更
