@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpriteAccelerationMove : MonoBehaviour
+public class SpriteAcceraletionMove : MonoBehaviour
 {
     [SerializeField]
     float Threshold = 0.1f;
@@ -16,6 +16,8 @@ public class SpriteAccelerationMove : MonoBehaviour
     float m_Speed = 0.5f;
     
     float m_sideAcceleration = 0.0f;
+
+    Vector3 rightVec = Vector3.right;
 
 	// Use this for initialization
 	void Start ()
@@ -31,11 +33,12 @@ public class SpriteAccelerationMove : MonoBehaviour
 
     void SideMove()
     {
-        if (Mathf.Abs(Input.acceleration.x) < Threshold) return;
+        float acceleration = GetAccelaration();
+        if (Mathf.Abs(acceleration) < Threshold) return;
 
-        m_sideAcceleration += Input.acceleration.x*m_Speed;
+        m_sideAcceleration += acceleration * m_Speed;
 
-        transform.localPosition += new Vector3(m_sideAcceleration,0,0);
+        transform.localPosition += rightVec * acceleration;
 
         //maximum
         if(transform.localPosition.x>xMaximum)
@@ -50,5 +53,14 @@ public class SpriteAccelerationMove : MonoBehaviour
             transform.localPosition = new Vector3(xMinimum, transform.localPosition.y, transform.localPosition.z);
             m_sideAcceleration = 0.0f;
         }
+    }
+
+    float GetAccelaration()
+    {
+#if UNITY_EDITOR
+        return Input.GetAxis("Horizontal") * 100.0f;
+#else
+        return Input.acceleration.x;
+#endif
     }
 }

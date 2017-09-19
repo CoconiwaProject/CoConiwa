@@ -30,6 +30,11 @@ public class UnderBerMenu : SingletonMonoBehaviour<UnderBerMenu>
         {
             nextSceneName = "Camera";
         }
+        //めんどくさいんで許してちょ
+        if (nextSceneName == "ContentList")
+        {
+            nextSceneName = "Content";
+        }
 
         for (int i = 0; i < m_Icons.Length; i++)
         {
@@ -53,12 +58,35 @@ public class UnderBerMenu : SingletonMonoBehaviour<UnderBerMenu>
     {
         if (sceneLoadManager.IsFading) return;
 
+        if (loadSceneName == "Content" && string.IsNullOrEmpty(AppData.SelectTargetName))
+        {
+            loadSceneName = "ContentList";
+        }
+
         m_audioSource.Play();
         sceneLoadManager.SceneTransition(loadSceneName, () =>
         {
             ChangeIconActive(loadSceneName);
-        },null);
+        }, null);
     }
+
+    public void ChangeTutorialScene(string loadSceneName)
+    {
+        if (sceneLoadManager.IsFading) return;
+        SceneLoadManager.I.SceneTransition(loadSceneName, () => UnderBerMenu.I.SetUnderBerActive(false), () => UnderBerMenu.I.transform.SetSiblingIndex(1));
+        m_audioSource.Play();
+    }
+
+    public void ChangeHomeScene(string loadSceneName)
+    {
+        if (sceneLoadManager.IsFading) return;
+        UnderBerMenu.I.transform.SetSiblingIndex(0);
+
+        SceneLoadManager.I.SceneTransition(loadSceneName, () => UnderBerMenu.I.SetUnderBerActive(true),()=> UnderBerMenu.I.transform.SetSiblingIndex(1));
+
+        m_audioSource.Play();
+    }
+
 
     /// <summary>
     /// 前のシーンをロードする

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class DeveloperMenu : MonoBehaviour
 {
     [SerializeField]
-    ContentsData contentsData;
+    ContentsData contentsData = null;
 
     [SerializeField]
     GameObject popUpMessage = null;

@@ -18,15 +18,14 @@ public class SceneLoadAttach : MonoBehaviour
             SceneLoadManager.I.LoadSceneAsync(LoadSceneName);
     }
 
+    public void LoadTutorialScene()
+    {
+        UnderBerMenu.I.ChangeTutorialScene("Tutorial");
+    }
+
+
     public void LoadScene()
     {
         SceneLoadManager.I.LoadScene(LoadSceneName);
-    }
-
-    //todo: ここに書かない
-    public void MapSceneLoad(string FileID)
-    {
-        AppData.SelectTargetName = FileID;
-        UnderBerMenu.I.ChangeScene("Content");
     }
 }

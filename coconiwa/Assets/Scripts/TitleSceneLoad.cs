@@ -10,34 +10,31 @@ public class TitleSceneLoad : MonoBehaviour
 
     public void NextScene()
     {
-        if (!PlayerPrefs.HasKey("Init")) SceneName = "Tutorial";
+        if (SceneLoadManager.I.IsFading) return;
 
         UnderBerMenu menu = UnderBerMenu.I;
         //menuをpanelの後ろに持ってくる
         menu.transform.SetSiblingIndex(0);
-
-        SceneLoadManager.I.SceneTransition(SceneName, () =>{
-            menu.SetUnderBerActive(true);
-        }, () =>{
-            menu.transform.SetSiblingIndex(1);
-        },duration);
-
-    }
-
-    IEnumerator IE_NextSceneLoad()
-    {
-        float t =0;
-        while(true)
-        {
-            t += Time.deltaTime;
-            float n = t / duration;
-            Panel.color = new Color(1,1,1,n*n);
-            if (t >= duration) break;
-            yield return null;
-        }
+        
+        bool isFirst=false;
         if (!PlayerPrefs.HasKey("Init"))
+        {
+            isFirst = true;
             SceneName = "Tutorial";
-            UnityEngine.SceneManagement.SceneManager.LoadScene(SceneName);
-        yield return null;
+        }
+
+        SceneLoadManager.I.SceneTransition(SceneName, () =>
+        {
+            if (isFirst)
+                menu.SetUnderBerActive(false);
+            else
+                menu.SetUnderBerActive(true);
+
+        }, () =>
+        {
+            if(!isFirst)
+            menu.transform.SetSiblingIndex(1);
+        }, duration);
+
     }
 }

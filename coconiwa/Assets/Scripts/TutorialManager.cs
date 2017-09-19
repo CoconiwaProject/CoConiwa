@@ -235,7 +235,9 @@ public class TutorialManager : MonoBehaviour
     public void OnNextButtone()
     {
         if (nowSelectCount == EndSelectCount - 1)
-            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+        {
+            UnderBerMenu.I.ChangeHomeScene(sceneName);
+        }
         else
         {
             //制限つける
