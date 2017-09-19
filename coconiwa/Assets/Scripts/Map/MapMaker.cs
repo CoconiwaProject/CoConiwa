@@ -4,12 +4,13 @@ using UnityEngine.UI;
 
 public class MapMaker : MonoBehaviour
 {    
-    public string fileID = "";
+    string fileID = "";
     public bool IsSelect = false;
     private static Coroutine popUPCoroutine = null;
 
     void Start()
     {
+        fileID = name;
         if (PlayerPrefs.GetInt("GetContents" + fileID) == 0)
         {
             //このマーカーはまだ見つけていないマーカー

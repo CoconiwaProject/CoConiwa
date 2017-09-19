@@ -22,11 +22,4 @@ public class SceneLoadAttach : MonoBehaviour
     {
         SceneLoadManager.I.LoadScene(LoadSceneName);
     }
-
-    //todo: ここに書かない
-    public void MapSceneLoad(string FileID)
-    {
-        AppData.SelectTargetName = FileID;
-        UnderBerMenu.I.ChangeScene("Content");
-    }
 }
