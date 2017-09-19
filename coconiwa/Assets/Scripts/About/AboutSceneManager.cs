@@ -27,7 +27,7 @@ public class AboutSceneManager : MonoBehaviour
             item.Init(contentsData.ContentDictionary[fileIDList[i]].ContentsName, fileIDList[i]);
         }
 
-#if DEVELOPMENT_BUILD
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
         AboutItem workSheet = Instantiate(itemPrefab, itemContainer);
         workSheet.Init("アンケート回答",
             () =>

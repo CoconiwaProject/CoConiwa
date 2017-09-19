@@ -236,7 +236,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (nowSelectCount == EndSelectCount - 1)
         {
-            SceneLoadManager.I.SceneTransition(sceneName, () => UnderBerMenu.I.SetUnderBerActive(true) , ()=> UnderBerMenu.I.transform.SetSiblingIndex(1));
+            UnderBerMenu.I.ChangeHomeScene(sceneName);
         }
         else
         {

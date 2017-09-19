@@ -10,7 +10,7 @@ public class TitleSceneLoad : MonoBehaviour
 
     public void NextScene()
     {
-
+        if (SceneLoadManager.I.IsFading) return;
 
         UnderBerMenu menu = UnderBerMenu.I;
         //menuをpanelの後ろに持ってくる
