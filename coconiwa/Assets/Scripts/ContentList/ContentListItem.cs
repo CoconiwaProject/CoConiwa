@@ -43,6 +43,6 @@ public class ContentListItem : MonoBehaviour
     public void JumpScene()
     {
         AppData.SelectTargetName = m_params.FileID;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Content");
+        UnderBerMenu.I.ChangeScene("Content");
     }
 }
