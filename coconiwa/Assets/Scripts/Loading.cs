@@ -6,6 +6,8 @@ public class Loading : MonoBehaviour
 {
     void Start()
     {
-        UnderBerMenu.I.ChangeScene("Content");
+        KKUtilities.WaitSeconde(0.5f, () => {
+            SceneLoadManager.I.LoadSceneAsync("Content");
+        }, this);
     }
 }
