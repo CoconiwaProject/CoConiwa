@@ -1,9 +1,21 @@
 ﻿using System.Collections;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class KKUtilities
 {
+    public static IEnumerator WaitSeconde(float waitTime,UnityAction action)
+    {
+       yield return new WaitForSeconds(waitTime);
+        action.Invoke();
+    }
+
+    public static void WaitSeconde(float waitTime, UnityAction action, MonoBehaviour mono)
+    {
+        mono.StartCoroutine(WaitSeconde(waitTime, action));
+    }
+
     /// <summary>
     /// 与えられたActionにduration秒かけて０→１になる値を毎フレーム渡す
     /// </summary>
