@@ -93,6 +93,12 @@ public class UnderBerMenu : SingletonMonoBehaviour<UnderBerMenu>
     /// </summary>
     public void LoadPreviousScene()
     {
+        if(sceneLoadManager.OldSceneName == "Load" || sceneLoadManager.OldSceneName == "Camera")
+        {
+            ChangeScene("CameraStarting");
+            return;
+        }
+
         ChangeScene(sceneLoadManager.OldSceneName);
     }
 
