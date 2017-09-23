@@ -23,7 +23,7 @@ public class UnderBerMenu : SingletonMonoBehaviour<UnderBerMenu>
         sceneLoadManager = SceneLoadManager.I;
     }
 
-    void ChangeIconActive(string nextSceneName)
+    public void ChangeIconActive(string nextSceneName)
     {
         //カメラ起動画面に飛んだ場合書き換える。　めんどくさいんで許してちょ
         if (nextSceneName == "CameraStarting")

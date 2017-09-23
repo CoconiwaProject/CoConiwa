@@ -7,7 +7,7 @@ public class CameraStartUp : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        KKUtilities.WaitSeconde(0.5f,()=> {
+        KKUtilities.WaitSeconde(2.0f,()=> {
             SceneLoadManager.I.LoadSceneAsync("Camera");
         },this);
       
