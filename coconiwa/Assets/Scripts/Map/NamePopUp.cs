@@ -6,6 +6,7 @@ public class NamePopUp : MonoBehaviour
 {
     string fileID = "";
 
+    //Noneの場合はLの画像を使用する
     private enum MakerType { P, A, L, None }
     public enum MakerSize { S, M, L, None }
 
@@ -29,7 +30,14 @@ public class NamePopUp : MonoBehaviour
 
     void SetPopUpTexture(MakerType type, MakerSize size)
     {
-        if (type == MakerType.None || size == MakerSize.None) return;
+        //表示するテキストが存在しない
+        if (size == MakerSize.None) return;
+
+        //Lに変換
+        if (type == MakerType.None)
+        {
+            type = MakerType.L;
+        }
         int index = ((int)type * (int)MakerType.None) + (int)size;
         transform.GetChild(0).GetComponent<Image>().sprite = MapManager.I.balloonImageList[index];
     }
