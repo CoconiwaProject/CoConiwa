@@ -5,7 +5,7 @@ public class MapPositionController : MonoBehaviour
     [SerializeField]
     RectTransform imageRect = null;
     Vector2 imageSize;
-    Vector3 imagePivot = new Vector3(0.5f, 0.5f);
+    Vector3 imagePivot = new Vector3(0.35f, 0.35f);
 
     //キャッシュ
     Vector3 zeroVec = Vector3.zero;

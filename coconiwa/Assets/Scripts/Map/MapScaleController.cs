@@ -10,7 +10,7 @@ public class MapScaleController : MonoBehaviour
     public const float scaleRateMax = 5.0f;
 
     //現在の値
-    float currentScaleRate = 1.0f;
+    float currentScaleRate = 1.5f;
     float scalingSpeed = 1.0f;
 
     //最初にタッチした時の2点間の距離.

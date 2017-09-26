@@ -18,7 +18,7 @@ public class ContentGroup : MonoBehaviour
         for(int i=0;i< contentParams.Count;i++)
         {
             ContentListItem item =  Instantiate(ItemPrefab, transform);
-            item.transform.localPosition = new Vector3((int)(i%3)*350,-(int)(i/3)*100,0);
+            item.transform.localPosition = new Vector3((int)(i%2)*550 + 100,-(int)(i * 0.5f)*100,0);
             item.BGImage.sprite = itemBGImage;
             item.ContentSet(contentParams[i]);
         }
