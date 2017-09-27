@@ -30,6 +30,7 @@ public class MapManager : SingletonMonoBehaviour<MapManager>
         base.Awake();
         //とりあえず横だけ
         screenSizeRate = 1.0f + (1.0f - ((float)Screen.width / 1080));
+        PlayerPrefs.SetInt("GetContents" + "I-01", 1);
     }
 
     protected override void Start()

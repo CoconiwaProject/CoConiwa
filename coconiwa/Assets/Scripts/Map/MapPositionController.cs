@@ -16,7 +16,7 @@ public class MapPositionController : MonoBehaviour
     Vector3 inerVec = Vector3.zero;
     //どの程度慣性の影響を受けるか
     float inerPow = 0.7f;
-    float minimumIner = 2.0f;
+    float minimumIner = 3.0f;
 
     //摩擦
     float rubPow = 5.0f;
