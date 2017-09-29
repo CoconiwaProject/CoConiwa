@@ -15,10 +15,10 @@ public class ContentGroup : MonoBehaviour
 
     public void Create()
     {
-        for(int i=0;i< contentParams.Count;i++)
+        for (int i = 0; i < contentParams.Count; i++)
         {
-            ContentListItem item =  Instantiate(ItemPrefab, transform);
-            item.transform.localPosition = new Vector3((int)(i%2)*550 + 100,-(int)(i * 0.5f)*100,0);
+            ContentListItem item = Instantiate(ItemPrefab, transform);
+            item.transform.localPosition = new Vector3((i % 2) * 550.0f + 80.0f, -(int)(i * 0.5f) * 100.0f, 0.0f);
             item.BGImage.sprite = itemBGImage;
             item.ContentSet(contentParams[i]);
         }
