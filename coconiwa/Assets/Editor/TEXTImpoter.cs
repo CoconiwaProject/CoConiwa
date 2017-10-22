@@ -3,23 +3,22 @@ using UnityEditor;
 using System.Collections;
 using System.IO;
 
-public class CSVImpoter : AssetPostprocessor
+public class TEXTImpoter : AssetPostprocessor
 {
 
     static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
     {
 
-        string targetFile = "Assets/CSV/Japanese.csv";
-        string exportFile = "Assets/CSV/Japanese.asset";
+        string targetFile = "Assets/CSV/ChinaTraditional.txt";
+        string exportFile = "Assets/CSV/ChinaTraditional.asset";
 
         foreach (string asset in importedAssets)
         {
-
             // 合致しないものはスルー
             if (!targetFile.Equals(asset)) continue;
 
             // 既存のマスタを取得
-            ContentsData data = AssetDatabase.LoadAssetAtPath< ContentsData >(exportFile);
+            ContentsData data = AssetDatabase.LoadAssetAtPath<ContentsData>(exportFile);
 
             // 見つからなければ作成する
             if (data == null)
@@ -39,29 +38,24 @@ public class CSVImpoter : AssetPostprocessor
             // CSVファイルをオブジェクトへ保存
             using (StreamReader sr = new StreamReader(targetFile))
             {
-
-                // ヘッダをやり過ごす
-                sr.ReadLine();
+                Debug.Log("textimport");
+                string line;
 
                 // ファイルの終端まで繰り返す
                 while (!sr.EndOfStream)
                 {
-                    string line = sr.ReadLine();
-                    string[] dataStrs = line.Split(',');
-
-                    // 追加するパラメータを生成
+                    // 追加するパラメータを生成v
                     ContentsData.Params p = new ContentsData.Params();
                     // 値を設定する
-                    //p.FileID = dataStrs[0];
-                    //p.ContentsName = dataStrs[1];
-                    //p.ContentsText = dataStrs[2];
+                    line = sr.ReadLine();
+                    p.FileID = line.Substring(0, 4);
+                    p.ContentsName = ReturnIntervalString(line.Remove(0, 4));
 
-                    p.FileID = dataStrs[1];
-                    p.ContentsName = dataStrs[2];
-                    p.ContentsText = dataStrs[5];
-
+                    line = sr.ReadLine();
+                    p.ContentsText = ReturnIntervalString(line);
                     // 追加
                     data.Elements.Add(p);
+                    sr.ReadLine();//改行分無視
                 }
             }
 
@@ -76,5 +70,32 @@ public class CSVImpoter : AssetPostprocessor
 
             Debug.Log("Data updated.");
         }
+
+
     }
+
+    //最初の空白文字を削除、kokoniwa修正
+    static string ReturnIntervalString(string originalString)
+    {
+        Debug.Log("strat==="+originalString);
+        string returnString = originalString;
+       // Debug.Log("3");
+       // int selectStrNum = 1;// returnString.IndexOf('　', ' ');
+        //最初の空白文字を削除
+        for (int i=0;i< originalString.Length;i++)
+        {
+            if (returnString[0] == ' ' || returnString[0] == '　')
+            {
+                returnString = returnString.Remove(0,1);
+            }
+            else
+                break;
+        }
+
+     
+
+        Debug.Log(returnString);
+        return returnString.Replace("kokoniwa", "coconiwa");
+    }
+
 }
