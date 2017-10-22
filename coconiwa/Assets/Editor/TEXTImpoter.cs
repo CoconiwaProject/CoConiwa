@@ -9,8 +9,8 @@ public class TEXTImpoter : AssetPostprocessor
     static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
     {
 
-        string targetFile = "Assets/CSV/ChinaTraditional.txt";
-        string exportFile = "Assets/CSV/ChinaTraditional.asset";
+        string targetFile = "Assets/CSV/ChinaSimplification.txt";
+        string exportFile = "Assets/CSV/ChinaSimplification.asset";
 
         foreach (string asset in importedAssets)
         {
@@ -48,6 +48,8 @@ public class TEXTImpoter : AssetPostprocessor
                     ContentsData.Params p = new ContentsData.Params();
                     // 値を設定する
                     line = sr.ReadLine();
+                    if (line.Length < 4)
+                        break;
                     p.FileID = line.Substring(0, 4);
                     p.ContentsName = ReturnIntervalString(line.Remove(0, 4));
 
@@ -97,5 +99,4 @@ public class TEXTImpoter : AssetPostprocessor
         Debug.Log(returnString);
         return returnString.Replace("kokoniwa", "coconiwa");
     }
-
 }

@@ -13,7 +13,7 @@ public class JSONImpoter : AssetPostprocessor
 
         foreach (string asset in importedAssets)
         {
-            合致しないものはスルー
+            //合致しないものはスルー
             if (!targetFile.Equals(asset)) continue;
 
             // 既存のマスタを取得
@@ -44,7 +44,7 @@ public class JSONImpoter : AssetPostprocessor
                 int nowCount = 1;
 
                 // ファイルの終端まで繰り返す
-                while (nowCount <= dataStrs.Length)
+                while (nowCount < dataStrs.Length)
                 {
                     // 追加するパラメータを生成
                     ContentsData.Params p = new ContentsData.Params();
