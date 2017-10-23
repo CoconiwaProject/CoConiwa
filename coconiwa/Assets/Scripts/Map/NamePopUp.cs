@@ -53,11 +53,16 @@ public class NamePopUp : MonoBehaviour
 
     public static MakerSize GetMakerSize(string fileName)
     {
-        if (fileName.Length > 7)
+        Debug.Log("文字の長さ="+fileName.Length);
+        int strLength = fileName.Length;
+        if (AppData.UsedLanguage == SystemLanguage.English)
+            strLength /= 2;
+
+        if (strLength > 7)
         {
             return MakerSize.L;
         }
-        else if (fileName.Length > 4)
+        else if (strLength > 4)
         {
             return MakerSize.M;
         }

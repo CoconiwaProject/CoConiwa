@@ -20,7 +20,6 @@ public class TitleSceneLoad : MonoBehaviour
     [SerializeField]
     ContentsData ChinaTraditionalData;
 
-
     private void Start()
     {
         SetLanguage();
@@ -66,10 +65,11 @@ public class TitleSceneLoad : MonoBehaviour
         SystemLanguage nowLanguage = Application.systemLanguage;
         if (nowLanguage == SystemLanguage.Japanese)
         {
-            AppData.UsedLanguage = SystemLanguage.Japanese;
             SetParams(data, KoreaData);
-            //foreach (ContentsData.Params p in ChinaSimplificationData.Elements)////////////////
-            //    data.Elements.Add(p);
+            AppData.UsedLanguage = SystemLanguage.Korean;//いったんテスト
+            //AppData.UsedLanguage = SystemLanguage.Japanese;
+            //  foreach (ContentsData.Params p in JapaneseData.Elements)
+            //      data.Elements.Add(p);
         }
         else if (nowLanguage == SystemLanguage.ChineseSimplified)
         {
@@ -80,20 +80,17 @@ public class TitleSceneLoad : MonoBehaviour
         else if (nowLanguage == SystemLanguage.ChineseTraditional || nowLanguage == SystemLanguage.Chinese)
         {
             AppData.UsedLanguage = SystemLanguage.ChineseTraditional;
-            foreach (ContentsData.Params p in ChinaTraditionalData.Elements)
-                data.Elements.Add(p);
+            SetParams(data, ChinaTraditionalData);
         }
         else if (nowLanguage == SystemLanguage.Korean)
         {
             AppData.UsedLanguage = SystemLanguage.Korean;
-            foreach (ContentsData.Params p in KoreaData.Elements)
-                data.Elements.Add(p);
+            SetParams(data,KoreaData);
         }
         else
         {
             AppData.UsedLanguage = SystemLanguage.English;
-            foreach (ContentsData.Params p in EnglishData.Elements)
-                data.Elements.Add(p);
+            SetParams(data, EnglishData);
         }
 
         //変更ここまで//
