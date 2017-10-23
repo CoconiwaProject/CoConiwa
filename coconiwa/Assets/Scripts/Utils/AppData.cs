@@ -8,5 +8,5 @@ public class AppData {
     public static string SelectTargetName;
     public static Texture[] SelectThetaPictures;
     public static bool CanChangePicture;
-    public static SystemLanguage usedLanguage;
+    public static SystemLanguage UsedLanguage;
 }
