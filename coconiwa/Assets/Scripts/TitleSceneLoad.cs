@@ -62,14 +62,13 @@ public class TitleSceneLoad : MonoBehaviour
         data.Elements.Clear();
         AssetDatabase.StartAssetEditing();
 
-        SystemLanguage nowLanguage = Application.systemLanguage;
+        //SystemLanguage nowLanguage = Application.systemLanguage;
+        SystemLanguage nowLanguage = SystemLanguage.Japanese;
         if (nowLanguage == SystemLanguage.Japanese)
         {
-            SetParams(data, KoreaData);
-            AppData.UsedLanguage = SystemLanguage.Korean;//いったんテスト
-            //AppData.UsedLanguage = SystemLanguage.Japanese;
-            //  foreach (ContentsData.Params p in JapaneseData.Elements)
-            //      data.Elements.Add(p);
+            AppData.UsedLanguage = SystemLanguage.Japanese;
+            foreach (ContentsData.Params p in JapaneseData.Elements)
+                data.Elements.Add(p);
         }
         else if (nowLanguage == SystemLanguage.ChineseSimplified)
         {
