@@ -4,82 +4,141 @@ using UnityEngine;
 
 public class ContentGroup : MonoBehaviour
 {
+    [SerializeField]
+    ContentListItem[] itemPrefabs = null;
 
     [SerializeField]
-    ContentListItem ItemPrefab;
-
-    [SerializeField]
-    Sprite itemBGImage;
+    Sprite itemBGImage = null;
 
     public List<ContentsData.Params> contentParams = new List<ContentsData.Params>();
 
+    const int oneLineTextLength = 24;//24以下だと１列
+    const int towLineTextLength = 50;//50以下だと２列
+
+    public ContentListItem mostUnderItem;
+
     public void Create()
     {
-        int oneLineSize = 22;//22以上だと一列、
-        int towLineSize = 50;//50以上だと２列?
+        //配置するX座標
+        const float leftX = 110.0f;
+        const float rightX = 620.0f;
 
-        float xScale = 2.2f;//一列の際のかけるサイズ
-        float yScale = 2.2f;
+        bool isLeft = true;
 
-        int xCount=0;
-        int yCount = 0;
+        //Y座標の間隔
+        float yDistance = 90.0f;
+        const float yDistanceRate = 20.0f;
+        float currentY = 80.0f;
+        bool isChangeDistance = false;
+        
 
+        //ストック
+        List<ContentsData.Params> oneLineContentList = new List<ContentsData.Params>();
+        List<ContentsData.Params> towLineContentList = new List<ContentsData.Params>();
+        List<ContentsData.Params> threeLineContentList = new List<ContentsData.Params>();
+
+        //計算用
+        Vector3 itemPosition = Vector3.zero;
+        ContentListItem item = null;
+
+        //仕分け
         for (int i = 0; i < contentParams.Count; i++)
         {
-            Debug.Log("文字数=" + contentParams[i].ContentsName.Length + "=" + contentParams[i].ContentsName);
-            ContentListItem item = Instantiate(ItemPrefab, transform);
-            int strLength = contentParams[i].ContentsName.Length;
-            if (strLength<=oneLineSize)
+            int lineNum = GetTextLineNum(contentParams[i].ContentsName);
+
+            Debug.Log(contentParams[i].ContentsName + " lineNum = " + lineNum);
+            switch (lineNum)
             {
-                Debug.Log("少");
-             item.transform.localPosition = new Vector3((xCount % 2) * 550.0f + 80.0f, -yCount * 100.0f, 0.0f);
-                xCount++;
-                if (xCount % 2 == 0)
-                    yCount++;
+                case 1:
+                    oneLineContentList.Add(contentParams[i]);
+                    break;
+                case 2:
+                    towLineContentList.Add(contentParams[i]);
+                    break;
+                case 3:
+                    threeLineContentList.Add(contentParams[i]);
+                    break;
             }
-            else if(strLength<=towLineSize)
-            {
-                RectTransform r = item.gameObject.GetComponent<RectTransform>();
-                r.sizeDelta = new Vector2(r.sizeDelta.x*xScale, r.sizeDelta.y);
-                RectTransform textRect =item.text.gameObject.GetComponent<RectTransform>();
-                textRect.sizeDelta = new Vector2(textRect.sizeDelta.x * xScale, textRect.sizeDelta.y);
-
-                if (xCount % 2 == 1)
-                    yCount++;
-                xCount = 0;
-                item.transform.localPosition = new Vector3( 360, -yCount * 100.0f , 0.0f);
-                yCount++;
-            }
-            else
-            {
-
-                RectTransform r = item.gameObject.GetComponent<RectTransform>();
-                r.sizeDelta = new Vector2(r.sizeDelta.x * xScale, r.sizeDelta.y* yScale);
-                RectTransform textRect = item.text.gameObject.GetComponent<RectTransform>();
-                textRect.sizeDelta = new Vector2(textRect.sizeDelta.x * xScale, textRect.sizeDelta.y * yScale);
-
-                if (xCount % 2 == 1)
-                    yCount++;
-                xCount = 0;
-                item.transform.localPosition = new Vector3(360, -yCount * 100.0f - 50, 0.0f);
-                yCount += 2;
-            }
-
-
-            item.BGImage.sprite = itemBGImage;
-            item.ContentSet(contentParams[i]);
         }
 
+        //小さいのから配置していく
+        for (int i = 0; i < oneLineContentList.Count; i++)
+        {
+            item = Instantiate(itemPrefabs[0], transform);
 
-        //for (int i = 0; i < contentParams.Count; i++)
-        //{
-        //    Debug.Log("文字数="+ contentParams[i].ContentsName.Length+"="+ contentParams[i].ContentsName);
+            //座標の計算
+            itemPosition.x = isLeft ? leftX : rightX;
+            isLeft = !isLeft;
+            currentY -= ((i + 1) % 2) * yDistance;
+            itemPosition.y = currentY;
+            item.transform.localPosition = itemPosition;
 
+            item.BGImage.sprite = itemBGImage;
+            item.ContentSet(oneLineContentList[i]);
+        }
 
-        //    ContentListItem item = Instantiate(ItemPrefab, transform);
-        //    item.transform.localPosition = new Vector3((i % 2) * 550.0f + 80.0f, -(int)(i * 0.5f) * 100.0f, 0.0f);
-        //    item.BGImage.sprite = itemBGImage;
-        //    item.ContentSet(contentParams[i]);
-        //}
+        yDistance += yDistanceRate;
+        isLeft = true;
+
+        //以下規則性のあるコードが並ぶが、うまいこと思い浮かばなかったので許して
+        for (int i = 0; i < towLineContentList.Count; i++)
+        {
+            if(i == 2)
+            {
+                yDistance += yDistanceRate;
+                isChangeDistance = true;
+            }
+
+            item = Instantiate(itemPrefabs[1], transform);
+
+            //座標の計算
+            itemPosition.x = isLeft ? leftX : rightX;
+            isLeft = !isLeft;
+            currentY -= ((i + 1) % 2) * yDistance;
+            itemPosition.y = currentY;
+            item.transform.localPosition = itemPosition;
+
+            item.BGImage.sprite = itemBGImage;
+            item.ContentSet(towLineContentList[i]);
+        }
+
+        if (!isChangeDistance) yDistance += yDistanceRate;
+        yDistance += yDistanceRate;
+        isLeft = true;
+
+        for (int i = 0; i < threeLineContentList.Count; i++)
+        {
+            if (i == 2)
+            {
+                yDistance += yDistanceRate;
+            }
+
+            item = Instantiate(itemPrefabs[2], transform);
+
+            //座標の計算
+            itemPosition.x = isLeft ? leftX : rightX;
+            isLeft = !isLeft;
+            currentY -= ((i + 1) % 2) * yDistance;
+            itemPosition.y = currentY;
+            item.transform.localPosition = itemPosition;
+
+            item.BGImage.sprite = itemBGImage;
+            item.ContentSet(threeLineContentList[i]);
+        }
+
+        mostUnderItem = item;
+    }
+
+    /// <summary>
+    /// 渡されたテキストを何行で表示すればよいかを返す
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    int GetTextLineNum(string text)
+    {
+        int length = text.Length;
+        if (towLineTextLength < length) return 3;
+        else if (oneLineTextLength < length) return 2;
+        else return 1;
     }
 }
