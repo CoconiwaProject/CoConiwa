@@ -6,16 +6,19 @@ using UnityEngine.UI;
 public class ContentListManager : MonoBehaviour
 {
     [SerializeField]
-    ContentsData contentsData;
+    ContentsData contentsData = null;
 
     [SerializeField]
-    ContentGroup ContentGroupA;
+    ContentGroup ContentGroupA = null;
 
     [SerializeField]
-    ContentGroup ContentGroupP;
+    ContentGroup ContentGroupP = null;
 
     [SerializeField]
-    ContentGroup ContentGroupI;
+    ContentGroup ContentGroupI = null;
+
+    [SerializeField]
+    RectTransform contentRec = null;
 
 
     // Use this for initialization
@@ -47,7 +50,14 @@ public class ContentListManager : MonoBehaviour
 
         ContentGroupA.Create();
         ContentGroupP.Create();
-        ContentGroupI.Create();
+        //ContentGroupI.Create();
+
+        RectTransform rec = ContentGroupA.mostUnderItem.transform as RectTransform;
+        RectTransform parentRec = rec.parent as RectTransform;
+        float limit = rec.anchoredPosition.y + parentRec.anchoredPosition.y - 100.0f;
+        Vector2 contentRecSize = contentRec.sizeDelta;
+        contentRecSize.y = Mathf.Abs(limit);
+        contentRec.sizeDelta = contentRecSize;
     }
 
 
