@@ -8,7 +8,7 @@ public class NamePopUp : MonoBehaviour
 
     //Noneの場合はLの画像を使用する
     private enum MakerType { P, A, L, None }
-    public enum MakerSize { S, M, L, None }
+    public enum MakerSize { S, M, L, LL, None }
 
     void Start()
     {
@@ -32,6 +32,10 @@ public class NamePopUp : MonoBehaviour
     {
         //表示するテキストが存在しない
         if (size == MakerSize.None) return;
+        if (size == MakerSize.LL)
+        {
+            size = MakerSize.L;
+        }
 
         //Lに変換
         if (type == MakerType.None)
@@ -53,12 +57,15 @@ public class NamePopUp : MonoBehaviour
 
     public static MakerSize GetMakerSize(string fileName)
     {
-        Debug.Log("文字の長さ="+fileName.Length);
+        Debug.Log("文字の長さ=" + fileName.Length);
         int strLength = fileName.Length;
         if (AppData.UsedLanguage == SystemLanguage.English)
             strLength /= 2;
-
-        if (strLength > 7)
+        if (strLength > 20)
+        {
+            return MakerSize.LL;
+        }
+        else if (strLength > 7)
         {
             return MakerSize.L;
         }
