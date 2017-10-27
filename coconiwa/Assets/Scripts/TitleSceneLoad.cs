@@ -63,7 +63,7 @@ public class TitleSceneLoad : MonoBehaviour
         AssetDatabase.StartAssetEditing();
 
         //SystemLanguage nowLanguage = Application.systemLanguage;
-        SystemLanguage nowLanguage = SystemLanguage.Japanese;
+        SystemLanguage nowLanguage = SystemLanguage.English;
         if (nowLanguage == SystemLanguage.Japanese)
         {
             AppData.UsedLanguage = SystemLanguage.Japanese;

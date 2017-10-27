@@ -50,11 +50,11 @@ public class JSONImpoter : AssetPostprocessor
                     // 追加するパラメータを生成
                     ContentsData.Params p = new ContentsData.Params();
                     // 値を設定する
-                    p.FileID = ChangeString(ReturnIntervalString(RemoveTopChar(dataStrs[nowCount],removeChar)));
+                    p.FileID = ChangeString(ReturnIntervalString(RemoveTopChar(dataStrs[nowCount], removeChar)));
                     nowCount++;
                     p.ContentsName = ChangeString(ReturnIntervalString(RemoveNumberChar(RemoveTopChar(dataStrs[nowCount], removeChar))));
                     nowCount++;
-                    p.ContentsText = ChangeString(ReturnIntervalString(RemoveTopChar(dataStrs[nowCount], removeChar)));
+                    p.ContentsText = ChangeString(ReturnIntervalString(RemoveTopChar(dataStrs[nowCount], removeChar),"\"}"));
                     nowCount++;
                     // 追加
                     data.Elements.Add(p);
@@ -121,10 +121,10 @@ public class JSONImpoter : AssetPostprocessor
 
 
 
-    static string ReturnIntervalString(string originalString)
+    static string ReturnIntervalString(string originalString,string sarchString= "\"")
     {
-        string returnString = originalString;
-        int selectStrNum = returnString.IndexOf("\"");
+        string returnString = originalString; 
+        int selectStrNum = returnString.IndexOf(sarchString);
         return returnString.Remove(selectStrNum);
     }
     static string ChangeString(string originalString)

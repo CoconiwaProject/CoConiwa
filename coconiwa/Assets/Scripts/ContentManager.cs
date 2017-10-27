@@ -41,8 +41,8 @@ public class ContentManager : MonoBehaviour
      
         if (index == -1) return;
         m_Image.sprite = Resources.Load<Sprite>(contentsData.Elements[index].FileID);
-        ContentName.text = contentsData.Elements[index].ContentsName;
-        ContentText.GetText("\n\n"+contentsData.Elements[index].ContentsText);
+        ContentName.text=contentsData.Elements[index].ContentsName;
+       ContentText.GetText(contentsData.Elements[index].ContentsText);
        
         contentsTextController.SetTextInterval();
         char h= contentsData.Elements[index].FileID[0];
