@@ -72,17 +72,12 @@ public class TEXTImpoter : AssetPostprocessor
 
             Debug.Log("Data updated.");
         }
-
-
     }
 
     //最初の空白文字を削除、kokoniwa修正
     static string ReturnIntervalString(string originalString)
     {
-        Debug.Log("strat==="+originalString);
         string returnString = originalString;
-       // Debug.Log("3");
-       // int selectStrNum = 1;// returnString.IndexOf('　', ' ');
         //最初の空白文字を削除
         for (int i=0;i< originalString.Length;i++)
         {
@@ -93,10 +88,6 @@ public class TEXTImpoter : AssetPostprocessor
             else
                 break;
         }
-
-     
-
-        Debug.Log(returnString);
         return returnString.Replace("kokoniwa", "coconiwa");
     }
 }
