@@ -11,9 +11,8 @@ public class TitleSceneLoad : MonoBehaviour
 
     private void Start()
     {
-        //AppData.UsedLanguage = Application.systemLanguage;
-
-        AppData.UsedLanguage = SystemLanguage.Korean;
+        AppData.UsedLanguage = Application.systemLanguage;
+        //AppData.UsedLanguage = SystemLanguage.Korean;
     }
 
     public void NextScene()
