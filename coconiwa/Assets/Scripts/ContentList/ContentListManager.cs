@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class ContentListManager : MonoBehaviour
 {
-    [SerializeField]
     ContentsData contentsData = null;
 
     [SerializeField]
@@ -24,6 +23,7 @@ public class ContentListManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        contentsData = AppData.ContentsData;
         for (int i = 0; i < contentsData.Elements.Count; i++)
         {
             Sprite sprite = Resources.Load<Sprite>(contentsData.Elements[i].FileID);

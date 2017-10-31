@@ -10,7 +10,7 @@ public class TEXTImpoter : AssetPostprocessor
     {
 
         string targetFile = "Assets/CSV/ChinaSimplification.txt";
-        string exportFile = "Assets/CSV/ChinaSimplification.asset";
+        string exportFile = "Assets/Resources/ChinaSimplification.asset";
 
         foreach (string asset in importedAssets)
         {

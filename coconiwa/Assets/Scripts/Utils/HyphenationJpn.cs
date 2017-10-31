@@ -42,13 +42,13 @@ public class HyphenationJpn : UIBehaviour
         base.OnRectTransformDimensionsChange();
         UpdateText(text);
     }
-
+#if UNITY_EDITOR
     protected override void OnValidate()
     {
         base.OnValidate();
         UpdateText(text);
     }
-
+#endif
     void UpdateText(string str)
     {
         // update Text

@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class DeveloperMenu : MonoBehaviour
 {
-    [SerializeField]
     ContentsData contentsData = null;
 
     [SerializeField]
@@ -19,6 +18,10 @@ public class DeveloperMenu : MonoBehaviour
     [SerializeField]
     GameObject workSheetManager = null;
 
+    private void Start()
+    {
+        contentsData = AppData.ContentsData;
+    }
 
     public void Open()
     {

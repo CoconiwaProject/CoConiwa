@@ -26,14 +26,14 @@ public class ContentsData : ScriptableObject
             //まだデータがセットされていなかったら
             if (contentDictionary.Count == 0)
             {
-                AddDictionary(Elements);
+                InitDictionary(Elements);
             }
 
             return contentDictionary;
         }
     }
 
-    void AddDictionary(List<Params> elements)
+    void InitDictionary(List<Params> elements)
     {
         if (elements.Count == 0)
         {
@@ -46,4 +46,21 @@ public class ContentsData : ScriptableObject
             contentDictionary.Add(elements[i].FileID, elements[i]);
         }
     }
+
+    public void AddContent(Params element)
+    {
+        Elements.Add(element);
+        ContentDictionary.Add(element.FileID, element);
+    }
+
+    public void RemoveContent(string fileID)
+    {
+        Params element;
+        if (!ContentDictionary.TryGetValue(fileID, out element)) return;
+
+        Elements.Remove(element);
+        contentDictionary.Remove(fileID);
+
+    }
+
 }

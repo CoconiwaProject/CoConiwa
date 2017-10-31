@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class ContentManager : MonoBehaviour
 {
-    [SerializeField]
     ContentsData contentsData;
 
     [SerializeField]
@@ -37,6 +36,7 @@ public class ContentManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+        contentsData = AppData.ContentsData;
         index = GetIndex(AppData.SelectTargetName);
      
         if (index == -1) return;

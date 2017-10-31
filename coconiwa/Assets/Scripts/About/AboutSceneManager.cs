@@ -7,7 +7,6 @@ public class AboutSceneManager : MonoBehaviour
     [SerializeField]
     string[] fileIDList = null;
 
-    [SerializeField]
     ContentsData contentsData = null;
 
     [SerializeField]
@@ -21,6 +20,7 @@ public class AboutSceneManager : MonoBehaviour
 
     void Start()
     {
+        contentsData = AppData.ContentsData;
         for(int i = 0;i< fileIDList.Length;i++)
         {
             AboutItem item = Instantiate(itemPrefab, itemContainer);

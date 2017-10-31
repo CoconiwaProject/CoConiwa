@@ -8,7 +8,6 @@ public class MapManager : SingletonMonoBehaviour<MapManager>
 {
     public float screenSizeRate = 1.0f;
 
-    [SerializeField]
     ContentsData contentsData = null;
 
     public Image namePopUp = null;
@@ -36,6 +35,7 @@ public class MapManager : SingletonMonoBehaviour<MapManager>
     protected override void Start()
     {
         base.Start();
+        contentsData = AppData.ContentsData;
         List<GameObject> tempList = new List<GameObject>();
         tempList.AddRange(GameObject.FindGameObjectsWithTag("Maker"));
         for (int i = 0; i < tempList.Count; i++)
