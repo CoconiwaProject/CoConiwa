@@ -21,7 +21,12 @@ public class TutorialManager : MonoBehaviour
     Sprite[] circleSprites;
 
     [SerializeField]
-    UnityEngine.UI.Image[] circleImages;
+   Image[] circleImages;
+
+    [SerializeField]
+    List<Text> tutorialTexts = new List<Text>();
+    [SerializeField]
+    TutorialData tutorialData=null;
 
     private int nowSelectCount = 0;
     private const int EndSelectCount = 5;
