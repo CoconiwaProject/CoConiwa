@@ -10,6 +10,10 @@ public class ThetaButton : MonoBehaviour
 
     [SerializeField]
     Button popup = null;
+    public Button Popup
+    {
+        set { popup = value; }
+    }
 
     [SerializeField]
     Texture[] texs = null;

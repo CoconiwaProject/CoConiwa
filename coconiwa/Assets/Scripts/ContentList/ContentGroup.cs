@@ -46,7 +46,7 @@ public class ContentGroup : MonoBehaviour
         {
             int lineNum = GetTextLineNum(contentParams[i].ContentsName);
 
-            Debug.Log(contentParams[i].ContentsName + " lineNum = " + lineNum);
+           // Debug.Log(contentParams[i].ContentsName + " lineNum = " + lineNum);
             switch (lineNum)
             {
                 case 1:
