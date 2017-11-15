@@ -3,83 +3,74 @@
 public class VRFirstPersonCameraController : MonoBehaviour
 {
     Quaternion gyro;
-	Transform m_transform;
+    Transform m_transform;
 
-	#if UNITY_EDITOR
-    float longitude = 0.0f;
-    float latitude = 0.0f;
-	[SerializeField]
-    float speed = 20.0f;
-    bool canMouseControl = false;
-	//キャッシュ
+    [SerializeField]
+    float speed = 0.1f;
+    //キャッシュ
     Vector3 zeroVec = Vector3.zero;
-	#endif
+
+    float screenSizeRate;
+
+    bool isSwipe = false;
+
+    [SerializeField]
+    Transform sphere = null;
+
+    float longitude = 0.0f;
+    float latitude = -7.0f;
+
     void Start()
     {
         Input.gyro.enabled = true;
-		m_transform = transform;
+        m_transform = transform;
+        TouchManager.Instance.Drag += OnSwipe;
+
+        screenSizeRate = 1.0f + (1.0f - ((float)Screen.width / 1080));
     }
+
+#if !UNITY_EDITOR
+    void OnDestroy()
+    {
+        TouchManager.Instance.Drag -= OnSwipe;
+    }
+#endif
 
     void Update()
     {
-		
-#if UNITY_EDITOR
-		if (Input.GetKeyDown(KeyCode.Escape)) ChangeMouseControl();
-        EditorCameraController();
-        return;
-#else
-        if (!Input.gyro.enabled) return;
+        if (isSwipe) return;
+#if !UNITY_EDITOR
         gyro = Input.gyro.attitude;
         //ジャイロはデフォルトで下を向いているので90度修正。X軸もY軸も逆のベクトルに変換
         gyro = Quaternion.Euler(90.0f, 0.0f, 0.0f) * (new Quaternion(-gyro.x, -gyro.y, gyro.z, gyro.w));
-		m_transform.localRotation = gyro;
+        m_transform.localRotation = gyro;
 #endif
     }
 
-	#if UNITY_EDITOR
-    void EditorCameraController()
+    void LateUpdate()
     {
-        Vector2 input = GetKeyInputVector();
-        input *= Time.deltaTime * speed;
-        longitude += input.x;
-        latitude += input.y;
+        isSwipe = false;
+    }
 
-        longitude = longitude % 360.0f;
-        latitude = Mathf.Clamp(latitude, -60.0f, 80.0f);
+    void OnSwipe(object sender, CustomInputEventArgs e)
+    {
+        isSwipe = true;
+        float input;
+        input = e.Input.DeltaPosition.x;
+        
+        longitude += input * Time.deltaTime * speed;
 
         Vector3 targetPosition = transform.position + SphereCoordinate(longitude, latitude, 10.0f);
-        transform.LookAt(targetPosition);
+        sphere.LookAt(targetPosition);
     }
 
-    Vector2 GetKeyInputVector()
+    public void SetDifferenceVec(Vector2 vec)
     {
-        Vector2 input;
-        input.x = Input.GetAxis("Horizontal");
-        input.y = Input.GetAxis("Vertical");
+        longitude += vec.x;
+        latitude += vec.y;
 
-        if (canMouseControl)
-        {
-            input.x = Input.GetAxis("Mouse X");
-            input.y = Input.GetAxis("Mouse Y");
-        }
-
-        return input;
-    }
-
-    void ChangeMouseControl()
-    {
-        canMouseControl = !canMouseControl;
-
-        if (canMouseControl)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
+        Vector3 targetPosition = transform.position + SphereCoordinate(longitude, latitude, 10.0f);
+        sphere.LookAt(targetPosition);
     }
 
     /// <summary>
@@ -103,6 +94,4 @@ public class VRFirstPersonCameraController : MonoBehaviour
 
         return position;
     }
-
-	#endif
 }
