@@ -25,6 +25,9 @@ public class ThetaButton : MonoBehaviour
     [SerializeField]
     bool canChangePicture = false;
 
+    [SerializeField]
+    Vector3 differenceVec = Vector3.zero;
+
     void Awake()
     {
         m_button = GetComponent<Button>();
@@ -82,6 +85,7 @@ public class ThetaButton : MonoBehaviour
         currentSelectButton = null;
         AppData.SelectThetaPictures = texs;
         AppData.CanChangePicture = canChangePicture;
+        AppData.differenceVec = differenceVec;
         UnderBerMenu.I.ChangeScene("ViewTHETA");
     }
 }

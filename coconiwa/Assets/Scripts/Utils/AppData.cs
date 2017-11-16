@@ -9,6 +9,8 @@ public class AppData
     public static string SelectTargetName;
     public static Texture[] SelectThetaPictures;
     public static bool CanChangePicture;
+    public static Vector3 differenceVec;
+
     public static SystemLanguage UsedLanguage;
     static ContentsData contentsData;
     public static ContentsData ContentsData

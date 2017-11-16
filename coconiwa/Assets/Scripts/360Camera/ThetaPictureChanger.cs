@@ -42,6 +42,11 @@ public class ThetaPictureChanger : MonoBehaviour
 
     Camera mainCamera;
 
+    [SerializeField]
+    VRFirstPersonCameraController cameraComtroller = null;
+    [SerializeField]
+    Transform sphere = null;
+
     void Start()
     {
         if (!AppData.CanChangePicture) return;
@@ -142,7 +147,7 @@ public class ThetaPictureChanger : MonoBehaviour
         {
             StopCoroutine(positionControlCoroutine);
         }
-
+        
         currentSelectDirection = direction;
         Vector2 targetPosition = currentSelectDirection == SelectDirection.Left ? leftTextRec.anchoredPosition : rightTextRec.anchoredPosition;
         
@@ -157,6 +162,10 @@ public class ThetaPictureChanger : MonoBehaviour
     void ChangePicture(SelectDirection direction)
     {
         Texture picture = AppData.SelectThetaPictures[direction == SelectDirection.Left ? 0 : 1];
+
+        Vector3 temp = AppData.differenceVec;
+        if (direction == SelectDirection.Right) temp = -temp;
+        cameraComtroller.SetDifferenceVec(temp);
 
         SetPicture(picture);
     }
