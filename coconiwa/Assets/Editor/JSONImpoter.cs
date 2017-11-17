@@ -8,8 +8,8 @@ public class JSONImpoter : AssetPostprocessor
 
     static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
     {
-        string targetFile = "Assets/CSV/ChinaTraditional.json";
-        string exportFile = "Assets/Resources/ContentsData/ChinaTraditional.asset";
+        string targetFile = "Assets/CSV/ChinaSimplification.json";
+        string exportFile = "Assets/Resources/ContentsData/Chinese.asset";
 
         foreach (string asset in importedAssets)
         {
