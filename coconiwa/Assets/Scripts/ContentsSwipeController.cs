@@ -22,6 +22,8 @@ public class ContentsSwipeController : SingletonMonoBehaviour<ContentsSwipeContr
     float maxPositionX;
     float swipeStartX = 0.0f;
 
+    bool isChangeImage = false;
+
     void Initialize()
     {
         touchManager = TouchManager.Instance;
@@ -71,11 +73,13 @@ public class ContentsSwipeController : SingletonMonoBehaviour<ContentsSwipeContr
 
     void OnFlickStart(object sender, FlickEventArgs e)
     {
+        isChangeImage = false;
         swipeStartX = e.StartInput.ScreenPosition.x;
     }
 
     void OnFlickComplete(object sender, FlickEventArgs e)
     {
+        if (isChangeImage) return;
         //フリックを検出したら今の位置からではなくフリックした方向で選択しているイメージを判断する
         float flickvalue = swipeStartX - e.EndInput.ScreenPosition.x;
         float borderValue = 20.0f;
@@ -94,6 +98,8 @@ public class ContentsSwipeController : SingletonMonoBehaviour<ContentsSwipeContr
     void FitImage(int index)
     {
         index = Mathf.Clamp(index, 0, imageNum - 1);
+
+        isChangeImage = index != currentSelectIndex;
         currentSelectIndex = index;
         if (fitCoroutine != null)
         {

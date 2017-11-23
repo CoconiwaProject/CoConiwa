@@ -12,7 +12,7 @@ public class ContentManager : MonoBehaviour
     [SerializeField]
     ContentsPageControl pageControl = null;
 
-    const int maxImageNum = 3;
+    const int maxImageNum = 4;
     Image[] images;
 
     [SerializeField]
