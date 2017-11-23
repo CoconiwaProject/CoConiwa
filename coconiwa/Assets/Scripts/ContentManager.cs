@@ -9,11 +9,11 @@ public class ContentManager : MonoBehaviour
 
     [SerializeField]
     Transform imageContainer = null;
+    [SerializeField]
+    ContentsPageControl pageControl = null;
 
     const int maxImageNum = 3;
-    Image[] images = null;
-
-    public bool isMulti = false;
+    Image[] images;
 
     [SerializeField]
     Text ContentName = null;
@@ -60,13 +60,14 @@ public class ContentManager : MonoBehaviour
                 fileName = contentsData.Elements[index].FileID + c;
                 c++;
             }
-
-            Debug.Log(fileName);
+            
             images[i].sprite = Resources.Load<Sprite>(fileName);
             if (images[i].sprite == null) images[i].gameObject.SetActive(false);
-            else isMulti = true;
         }
 
+        int imageNum = GetImageNum();
+        ContentsSwipeController.I.SetImageNum(imageNum);
+        if(imageNum > 1) pageControl.Initialize(imageNum);
         
         ContentName.text = contentsData.Elements[index].ContentsName;
         ContentText.GetText(contentsData.Elements[index].ContentsText);
@@ -89,8 +90,19 @@ public class ContentManager : MonoBehaviour
             Header.sprite = Inter;
             ContentsBack.color = new Color(0.19f, 0.3f, 0.54f);
         }
+    }
 
+    int GetImageNum()
+    {
+        int imageNum = 0;
+        for(int i = 0;i< images.Length;i++)
+        {
+            if (images[i].sprite == null) continue;
 
+            imageNum++;
+        }
+
+        return imageNum;
     }
 
 
