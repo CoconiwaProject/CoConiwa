@@ -6,27 +6,31 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     [SerializeField]
-    Transform tutorialImagesTransform;
+    Transform tutorialImagesTransform=null;
 
     [SerializeField]
-    Transform textsTransform;
+    Transform textsTransform = null;
 
     [SerializeField]
-    Sprite[] buttoneSprites;
+    Sprite[] buttoneSprites = null;
 
     [SerializeField]
-    private Button nextButtone;
+    Sprite[] notButtoneSprites = null;
+
 
     [SerializeField]
-    Sprite[] circleSprites;
+     Button nextButtone = null;
+    [SerializeField]
+    Text buttoneText = null;
 
     [SerializeField]
-   Image[] circleImages;
+    Sprite[] circleSprites = null;
+
+    [SerializeField]
+   Image[] circleImages = null;
 
     [SerializeField]
     List<Text> tutorialTexts = new List<Text>();
-    [SerializeField]
-    TutorialData tutorialData=null;
 
     private int nowSelectCount = 0;
     private const int EndSelectCount = 5;
@@ -45,10 +49,27 @@ public class TutorialManager : MonoBehaviour
     private Vector3 mousePos;
     private Vector2 flickStartPosition;
 
+    public string[] EnglishButtoneText;
+    public string[] ChinaSimplificationButtoneText;
+    public string[] ChinaTraditionalButtoneText;
+    public string[] KoreaButtoneText;
+
+    public string[] useButtoneText;
+
+
     void Start()
     {
         PlayerPrefs.SetString("Init", "");
         // UnityEngine.SceneManagement.SceneManager.LoadScene(SceneName);
+
+        if(SystemLanguage.Japanese==AppData.UsedLanguage)
+        {
+            buttoneText.gameObject.SetActive(false);
+        }
+        else
+        {
+            SetStartButtone();
+        }
 
         isFlick = nowMove = false;
         moveSpeed = nowSelectCount = 0;
@@ -266,6 +287,8 @@ public class TutorialManager : MonoBehaviour
 
         if (nowSelect == EndSelectCount - 1)
         {
+            if (SystemLanguage.Japanese!=AppData.UsedLanguage)
+                buttoneText.text = useButtoneText[1];
             nextButtone.GetComponent<Image>().sprite = buttoneSprites[2];
             SpriteState s;
             s.pressedSprite = buttoneSprites[3];
@@ -275,6 +298,8 @@ public class TutorialManager : MonoBehaviour
         }
         else if (oldSelect == EndSelectCount - 1)
         {
+            if (SystemLanguage.Japanese != AppData.UsedLanguage)
+                buttoneText.text = useButtoneText[0];
             nextButtone.GetComponent<Image>().sprite = buttoneSprites[0];
             SpriteState s;
             s.pressedSprite = buttoneSprites[1];
@@ -282,5 +307,43 @@ public class TutorialManager : MonoBehaviour
             s.highlightedSprite = buttoneSprites[0];
             nextButtone.spriteState = s;
         }
+    }
+
+    private void SetStartButtone()
+    {
+        useButtoneText = new string[EnglishButtoneText.Length];
+        if(AppData.UsedLanguage==SystemLanguage.Chinese|| AppData.UsedLanguage == SystemLanguage.ChineseSimplified)
+        {
+            for (int i = 0; i < useButtoneText.Length; i++)
+                useButtoneText[i] = ChinaSimplificationButtoneText[i];
+        }
+        else if (AppData.UsedLanguage == SystemLanguage.ChineseTraditional)
+        {
+            for (int i = 0; i < useButtoneText.Length; i++)
+                useButtoneText[i] = ChinaTraditionalButtoneText[i];
+        }
+        else if (AppData.UsedLanguage == SystemLanguage.Korean)
+        {
+            for (int i = 0; i < useButtoneText.Length; i++)
+                useButtoneText[i] = KoreaButtoneText[i];
+        }
+        else 
+        {
+            for (int i = 0; i < useButtoneText.Length; i++)
+                useButtoneText[i] = EnglishButtoneText[i];
+        }
+        buttoneSprites[0] = notButtoneSprites[0];
+        buttoneSprites[1] = notButtoneSprites[1];
+        buttoneSprites[2] = notButtoneSprites[0];
+        buttoneSprites[3] = notButtoneSprites[1];
+
+        buttoneText.text = useButtoneText[0];
+
+        nextButtone.GetComponent<Image>().sprite = buttoneSprites[2];
+        SpriteState s;
+        s.pressedSprite = buttoneSprites[3];
+        s.disabledSprite = buttoneSprites[2];
+        s.highlightedSprite = buttoneSprites[2];
+        nextButtone.spriteState = s;
     }
 }
