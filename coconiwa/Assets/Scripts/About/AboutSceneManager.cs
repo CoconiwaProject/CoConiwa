@@ -27,6 +27,14 @@ public class AboutSceneManager : MonoBehaviour
             item.Init(contentsData.ContentDictionary[fileIDList[i]].ContentsName, fileIDList[i]);
         }
 
+        AboutItem credit = Instantiate(itemPrefab, itemContainer);
+        credit.Init(AppData.UsedLanguage == SystemLanguage.Japanese ? "クレジット": "Credit",
+            () =>
+            {
+                developerMenu.StartWorkSheet();
+            });
+
+
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
         AboutItem workSheet = Instantiate(itemPrefab, itemContainer);
         workSheet.Init("アンケート回答",
