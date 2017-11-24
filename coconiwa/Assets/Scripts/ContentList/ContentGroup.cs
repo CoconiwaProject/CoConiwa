@@ -17,8 +17,29 @@ public class ContentGroup : MonoBehaviour
 
     public ContentListItem mostUnderItem;
 
-    public void Create()
+    public void Create(ContentListItem UnderItem = null)
     {
+        //一つ上のグループの最下のアイテムが指定されていたらそれに合わせてグループの位置を移動
+        if(UnderItem!=null)
+        {
+            RectTransform rect = GetComponent<RectTransform>();
+
+            switch(AppData.UsedLanguage)
+            {
+                case SystemLanguage.English:
+                    rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, UnderItem.GetComponent<RectTransform>().anchoredPosition.y - 900);
+                    break;
+                case SystemLanguage.Japanese:
+                    rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, UnderItem.GetComponent<RectTransform>().anchoredPosition.y - 600);
+                    break;
+                case SystemLanguage.Korean:
+                case SystemLanguage.Chinese:
+                default:
+                    rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, UnderItem.GetComponent<RectTransform>().anchoredPosition.y - 700);
+                    break;
+            }
+           
+        }
         //配置するX座標
         const float leftX = 110.0f;
         const float rightX = 620.0f;
@@ -30,7 +51,7 @@ public class ContentGroup : MonoBehaviour
         const float yDistanceRate = 20.0f;
         float currentY = 80.0f;
         bool isChangeDistance = false;
-        
+
 
         //ストック
         List<ContentsData.Params> oneLineContentList = new List<ContentsData.Params>();
@@ -46,7 +67,7 @@ public class ContentGroup : MonoBehaviour
         {
             int lineNum = GetTextLineNum(contentParams[i].ContentsName);
 
-           // Debug.Log(contentParams[i].ContentsName + " lineNum = " + lineNum);
+            // Debug.Log(contentParams[i].ContentsName + " lineNum = " + lineNum);
             switch (lineNum)
             {
                 case 1:
@@ -83,7 +104,7 @@ public class ContentGroup : MonoBehaviour
         //以下規則性のあるコードが並ぶが、うまいこと思い浮かばなかったので許して
         for (int i = 0; i < towLineContentList.Count; i++)
         {
-            if(i == 2)
+            if (i == 2)
             {
                 yDistance += yDistanceRate;
                 isChangeDistance = true;

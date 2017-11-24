@@ -24,6 +24,7 @@ public class ContentListManager : MonoBehaviour
     void Start()
     {
         contentsData = AppData.ContentsData;
+       
         for (int i = 0; i < contentsData.Elements.Count; i++)
         {
             Sprite sprite = Resources.Load<Sprite>(contentsData.Elements[i].FileID);
@@ -50,13 +51,13 @@ public class ContentListManager : MonoBehaviour
 
         ContentGroupA.Create();
         ContentGroupP.Create();
-        //ContentGroupI.Create();
+        ContentGroupI.Create(ContentGroupP.mostUnderItem);
 
-        RectTransform rec = ContentGroupA.mostUnderItem.transform as RectTransform;
+        RectTransform rec = ContentGroupI.mostUnderItem.transform as RectTransform;
         RectTransform parentRec = rec.parent as RectTransform;
         float limit = rec.anchoredPosition.y + parentRec.anchoredPosition.y - 100.0f;
         Vector2 contentRecSize = contentRec.sizeDelta;
-        contentRecSize.y = Mathf.Abs(limit);
+        contentRecSize.y = Mathf.Abs(limit)*2;
         contentRec.sizeDelta = contentRecSize;
     }
 
