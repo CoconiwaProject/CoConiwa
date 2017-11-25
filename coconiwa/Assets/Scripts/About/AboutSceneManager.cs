@@ -18,6 +18,9 @@ public class AboutSceneManager : MonoBehaviour
     [SerializeField]
     DeveloperMenu developerMenu = null;
 
+    [SerializeField]
+    CreditController creditController = null;
+
     void Start()
     {
         contentsData = AppData.ContentsData;
@@ -31,7 +34,7 @@ public class AboutSceneManager : MonoBehaviour
         credit.Init(AppData.UsedLanguage == SystemLanguage.Japanese ? "クレジット": "Credit",
             () =>
             {
-                developerMenu.StartWorkSheet();
+                creditController.PushCredit();
             });
 
 
