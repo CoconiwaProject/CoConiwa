@@ -24,6 +24,7 @@ public class ContentsTextController : MonoBehaviour
         //SizeFilterの変更に１フレームかかるのでディレイをかける
         KKUtilities.WaitSeconde(0.01f, () =>
         {
+            //タイトルが2行になったら1行分ずらす
             Vector2 tmp = Vector2.down * (setTextTransforms[0].sizeDelta.y - 86.0f);
             setTextTransforms[1].anchoredPosition += tmp;
             setTextTransforms[2].anchoredPosition += tmp;

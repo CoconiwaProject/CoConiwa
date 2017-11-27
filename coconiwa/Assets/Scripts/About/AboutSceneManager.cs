@@ -18,6 +18,9 @@ public class AboutSceneManager : MonoBehaviour
     [SerializeField]
     DeveloperMenu developerMenu = null;
 
+    [SerializeField]
+    CreditController creditController = null;
+
     void Start()
     {
         contentsData = AppData.ContentsData;
@@ -26,6 +29,14 @@ public class AboutSceneManager : MonoBehaviour
             AboutItem item = Instantiate(itemPrefab, itemContainer);
             item.Init(contentsData.ContentDictionary[fileIDList[i]].ContentsName, fileIDList[i]);
         }
+
+        AboutItem credit = Instantiate(itemPrefab, itemContainer);
+        credit.Init(AppData.UsedLanguage == SystemLanguage.Japanese ? "クレジット": "Credit",
+            () =>
+            {
+                creditController.PushCredit();
+            });
+
 
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
         AboutItem workSheet = Instantiate(itemPrefab, itemContainer);
