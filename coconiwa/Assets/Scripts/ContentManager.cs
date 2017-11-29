@@ -12,8 +12,9 @@ public class ContentManager : MonoBehaviour
     [SerializeField]
     ContentsPageControl pageControl = null;
 
-    const int maxImageNum = 4;
-    Image[] images;
+    int maxImageNum;
+    [SerializeField]
+    Image imagePrefab = null;
 
     [SerializeField]
     Text ContentName = null;
@@ -46,28 +47,34 @@ public class ContentManager : MonoBehaviour
 
         if (index == -1) return;
 
-        string fileName = "";
+        string fileName = contentsData.Elements[index].FileID;
         char c = 'b';
+        Vector2 imagePosition = new Vector2(0.0f, 373.0f);
+        int fileNum = 0;
 
-        images = new Image[maxImageNum];
-        for (int i = 0; i < maxImageNum; i++)
+        while(true)
         {
-            images[i] = imageContainer.GetChild(i).GetComponent<Image>();
-            fileName = contentsData.Elements[index].FileID;
-
-            if (i > 0)
+            if(fileNum > 0)
             {
                 fileName = contentsData.Elements[index].FileID + c;
                 c++;
             }
-            
-            images[i].sprite = Resources.Load<Sprite>(fileName);
-            if (images[i].sprite == null) images[i].gameObject.SetActive(false);
+
+            Sprite sprite = Resources.Load<Sprite>(fileName);
+            if (sprite == null) break;
+
+            Image image = Instantiate(imagePrefab, imageContainer.transform);
+            imagePosition.x = fileNum * 1080.0f;
+            image.rectTransform.anchoredPosition = imagePosition;
+            image.sprite = sprite;
+
+            fileNum++;
         }
 
-        int imageNum = GetImageNum();
-        ContentsSwipeController.I.SetImageNum(imageNum);
-        if(imageNum > 1) pageControl.Initialize(imageNum);
+        maxImageNum = fileNum;
+
+        ContentsSwipeController.I.SetImageNum(maxImageNum);
+        if(maxImageNum > 1) pageControl.Initialize(maxImageNum);
         
         ContentName.text = contentsData.Elements[index].ContentsName;
         ContentText.GetText(contentsData.Elements[index].ContentsText);
@@ -90,19 +97,6 @@ public class ContentManager : MonoBehaviour
             Header.sprite = Inter;
             ContentsBack.color = new Color(0.19f, 0.3f, 0.54f);
         }
-    }
-
-    int GetImageNum()
-    {
-        int imageNum = 0;
-        for(int i = 0;i< images.Length;i++)
-        {
-            if (images[i].sprite == null) continue;
-
-            imageNum++;
-        }
-
-        return imageNum;
     }
 
 
