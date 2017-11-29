@@ -23,7 +23,7 @@ public class TutorialText : MonoBehaviour
     string[] English = new string[10]
     {
         "Application for better sightseeing",
-        "Kokoniwa is an application for sightseeing that high school and universuty students developed.You can enjoy the scenic spot \"Isui-en\" more deeply.",
+        "Coconiwa is an application for sightseeing that high school and universuty students developed.You can enjoy the scenic spot \"Isui-en\" more deeply.",
         "Please find the wooden tags.",
         "Some wooden tags are set up in the garden. Please find them!!",
         "Please take a picture with AR function.",
