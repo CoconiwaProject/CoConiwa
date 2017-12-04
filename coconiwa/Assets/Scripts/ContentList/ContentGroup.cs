@@ -62,6 +62,10 @@ public class ContentGroup : MonoBehaviour
         Vector3 itemPosition = Vector3.zero;
         ContentListItem item = null;
 
+
+        Font Arial = null;
+        if (AppData.ChangeFont)
+            Arial = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
         //仕分け
         for (int i = 0; i < contentParams.Count; i++)
         {
@@ -96,6 +100,8 @@ public class ContentGroup : MonoBehaviour
 
             item.BGImage.sprite = itemBGImage;
             item.ContentSet(oneLineContentList[i]);
+            if (AppData.ChangeFont)
+                item.text.font = Arial;
         }
 
         yDistance += yDistanceRate;
@@ -121,6 +127,8 @@ public class ContentGroup : MonoBehaviour
 
             item.BGImage.sprite = itemBGImage;
             item.ContentSet(towLineContentList[i]);
+            if (AppData.ChangeFont)
+                item.text.font = Arial;
         }
 
         if (!isChangeDistance) yDistance += yDistanceRate;
@@ -145,6 +153,8 @@ public class ContentGroup : MonoBehaviour
 
             item.BGImage.sprite = itemBGImage;
             item.ContentSet(threeLineContentList[i]);
+            if (AppData.ChangeFont)
+                item.text.font = Arial;
         }
 
         mostUnderItem = item;

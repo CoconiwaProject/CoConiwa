@@ -12,7 +12,15 @@ public class TitleSceneLoad : MonoBehaviour
     private void Start()
     {
         AppData.UsedLanguage = Application.systemLanguage;
-        //AppData.UsedLanguage = SystemLanguage.Korean;
+       // AppData.UsedLanguage = SystemLanguage.Korean;
+        if (AppData.UsedLanguage == SystemLanguage.Korean ||
+           AppData.UsedLanguage == SystemLanguage.Chinese ||
+           AppData.UsedLanguage == SystemLanguage.ChineseSimplified ||
+           AppData.UsedLanguage == SystemLanguage.ChineseTraditional)
+            AppData.ChangeFont = true;
+        else
+            AppData.ChangeFont = false;
+
     }
 
     public void NextScene()

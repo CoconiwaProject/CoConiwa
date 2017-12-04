@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class AboutItem : MonoBehaviour
 {
     [SerializeField]
-    Text title = null;
+    public Text title = null;
 
     [SerializeField]
     Button button;
