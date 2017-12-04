@@ -29,12 +29,11 @@ public class VRFirstPersonCameraController : MonoBehaviour
         screenSizeRate = 1.0f + (1.0f - ((float)Screen.width / 1080));
     }
 
-#if !UNITY_EDITOR
     void OnDestroy()
     {
-        TouchManager.Instance.Drag -= OnSwipe;
+        if (TouchManager.Instance != null)
+            TouchManager.Instance.Drag -= OnSwipe;
     }
-#endif
 
     void Update()
     {
@@ -57,7 +56,7 @@ public class VRFirstPersonCameraController : MonoBehaviour
         isSwipe = true;
         float input;
         input = e.Input.DeltaPosition.x;
-        
+
         longitude += input * Time.deltaTime * speed;
 
         Vector3 targetPosition = transform.position + SphereCoordinate(longitude, latitude, 10.0f);
