@@ -29,8 +29,12 @@ public class CreditController : MonoBehaviour
     [SerializeField]
     GameObject Panel = null;
 
+    [SerializeField]
+    GameObject CrediyHeader = null;
+
     public void PushCredit()
     {
+        CrediyHeader.SetActive(true);
         Panel.SetActive(true);
         content.SetActive(false);
         HeaderObject.SetActive(false);
@@ -47,12 +51,22 @@ public class CreditController : MonoBehaviour
             {
                 englishTextBox.gameObject.SetActive(true);
                 rectTransform = englishTextBox;
-                titleText.text= "EnglishTextTitle";
+                titleText.text= "COCONIWA PROJECT";
             }
             copyRightTextBox.anchoredPosition = rectTransform.anchoredPosition + (rectTransform.sizeDelta.y) * Vector2.down;
 
             textBox.sizeDelta = new Vector2(textBox.sizeDelta.x, rectTransform.sizeDelta.y + copyRightTextBox.sizeDelta.y + 40.0f);
         }, this);
+    }
+    public void ClickBackButton()
+    {
+        CrediyHeader.SetActive(false);
+        Panel.SetActive(false);
+        content.SetActive(true);
+        HeaderObject.SetActive(true);
+        titleText.gameObject.SetActive(false);
+        englishTextBox.gameObject.SetActive(false);
+        japaneseTextBox.gameObject.SetActive(false);
     }
 
 }
