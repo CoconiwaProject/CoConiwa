@@ -15,8 +15,7 @@ public class ChangeMultiLanguageFont : MonoBehaviour
     // Use this for initialization
     void Start()
     {
- // if(AppData.ChangeFont)
-        if(true)
+        if (AppData.ChangeFont)
         { 
             Arial = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
 
