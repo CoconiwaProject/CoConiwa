@@ -20,29 +20,18 @@ public class ContentGroup : MonoBehaviour
     public void Create(ContentListItem UnderItem = null)
     {
         //一つ上のグループの最下のアイテムが指定されていたらそれに合わせてグループの位置を移動
-        if(UnderItem!=null)
+        if (UnderItem != null)
         {
             RectTransform rect = GetComponent<RectTransform>();
+            RectTransform parentRect = UnderItem.transform.parent.GetComponent<RectTransform>();
+            RectTransform itemRect = UnderItem.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector3(rect.anchoredPosition.x, parentRect.anchoredPosition.y + itemRect.anchoredPosition.y - 200, 0);
 
-            switch(AppData.UsedLanguage)
-            {
-                case SystemLanguage.English:
-                    rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, UnderItem.GetComponent<RectTransform>().anchoredPosition.y - 900);
-                    break;
-                case SystemLanguage.Japanese:
-                    rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, UnderItem.GetComponent<RectTransform>().anchoredPosition.y - 600);
-                    break;
-                case SystemLanguage.Korean:
-                case SystemLanguage.Chinese:
-                default:
-                    rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, UnderItem.GetComponent<RectTransform>().anchoredPosition.y - 700);
-                    break;
-            }
-           
         }
+
         //配置するX座標
-        const float leftX = 110.0f;
-        const float rightX = 620.0f;
+        const float leftX = 120.0f;
+        const float rightX = 610.0f;
 
         bool isLeft = true;
 

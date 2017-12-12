@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class ContentListManager : MonoBehaviour
 {
+    [SerializeField]
+    bool useSerializeData=false;
+
+    [SerializeField]
     ContentsData contentsData = null;
 
     [SerializeField]
@@ -23,8 +27,15 @@ public class ContentListManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+#if UNITY_EDITOR
+        if (!useSerializeData)
+        {
+            contentsData = AppData.ContentsData;
+        }
+#else
         contentsData = AppData.ContentsData;
-       
+#endif
+
         for (int i = 0; i < contentsData.Elements.Count; i++)
         {
             Sprite sprite = Resources.Load<Sprite>(contentsData.Elements[i].FileID);
@@ -48,16 +59,15 @@ public class ContentListManager : MonoBehaviour
                 ContentGroupI.contentParams.Add(contentsData.Elements[i]);
             }
         }
-
-        ContentGroupA.Create();
         ContentGroupP.Create();
         ContentGroupI.Create(ContentGroupP.mostUnderItem);
+        ContentGroupA.Create(ContentGroupI.mostUnderItem);
 
-        RectTransform rec = ContentGroupI.mostUnderItem.transform as RectTransform;
+        RectTransform rec = ContentGroupA.mostUnderItem.transform as RectTransform;
         RectTransform parentRec = rec.parent as RectTransform;
         float limit = rec.anchoredPosition.y + parentRec.anchoredPosition.y - 100.0f;
         Vector2 contentRecSize = contentRec.sizeDelta;
-        contentRecSize.y = Mathf.Abs(limit)*2;
+        contentRecSize.y = Mathf.Abs(limit);
         contentRec.sizeDelta = contentRecSize;
     }
 
