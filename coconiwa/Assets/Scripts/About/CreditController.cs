@@ -18,9 +18,6 @@ public class CreditController : MonoBehaviour
     RectTransform englishTextBox = null;
 
     [SerializeField]
-    RectTransform copyRightTextBox = null;
-
-    [SerializeField]
     GameObject HeaderObject = null;
 
     [SerializeField]
@@ -53,9 +50,8 @@ public class CreditController : MonoBehaviour
                 rectTransform = englishTextBox;
                 titleText.text= "COCONIWA PROJECT";
             }
-            copyRightTextBox.anchoredPosition = rectTransform.anchoredPosition + (rectTransform.sizeDelta.y) * Vector2.down;
-
-            textBox.sizeDelta = new Vector2(textBox.sizeDelta.x, rectTransform.sizeDelta.y + copyRightTextBox.sizeDelta.y + 40.0f);
+    
+            textBox.sizeDelta = new Vector2(textBox.sizeDelta.x, rectTransform.sizeDelta.y);
         }, this);
     }
     public void ClickBackButton()
