@@ -9,25 +9,24 @@ public class CanvasMode : MonoBehaviour
     private static bool _isIphoneX = true;
 
     [RuntimeInitializeOnLoadMethod]
-    void Init()
+    static void Init()
     {
-#if UNITY_IPHONE
-        string deviceName =  UnityEngine.iOS.DeviceGeneration.iPhoneX.ToString();
-        _isIphoneX = deviceName.Equals("iPhoneX");
-#endif
+        float aspect = Camera.main.aspect;
+ 
+        _isIphoneX = (aspect > 9 / 16);    
     }
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         //状況を見て縦と横のどちらを優先するか決定する
-	  if(_isIphoneX)
+        if (_isIphoneX)
         {
             GetComponent<CanvasScaler>().matchWidthOrHeight = 0;
-        }	
-      else
+        }
+        else
         {
             GetComponent<CanvasScaler>().matchWidthOrHeight = 1;
         }
-	}
+    }
 }
