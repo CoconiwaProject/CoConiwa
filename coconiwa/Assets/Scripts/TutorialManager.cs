@@ -9,7 +9,7 @@ public class TutorialManager : MonoBehaviour
     Transform tutorialImagesTransform=null;
 
     [SerializeField]
-    Transform textsTransform = null;
+    RectTransform textsTransform = null;
 
     [SerializeField]
     Sprite[] buttoneSprites = null;
@@ -80,8 +80,8 @@ public class TutorialManager : MonoBehaviour
         ImageControl();
         if (nowMove)
         {
-            Vector3 positio = tutorialImagesTransform.localPosition;
-            float judge = positio.x;
+            Vector3 position = tutorialImagesTransform.localPosition;
+            float judge = position.x;
             float judge2 = -interval * nowSelectCount;
             if (moveSpeed > 0)
             {
@@ -94,28 +94,33 @@ public class TutorialManager : MonoBehaviour
             {
                 if (moveSpeed > 0)
                 {
-                    positio.x += moveSpeed;
-                    judge2 = positio.x;
+                    position.x += moveSpeed;
+                    judge2 = position.x;
                 }
                 else
                 {
-                    positio.x += moveSpeed;
-                    judge = positio.x;
+                    position.x += moveSpeed;
+                    judge = position.x;
 
                 }
 
                 if (judge > judge2)
-                    textsTransform.transform.position = tutorialImagesTransform.localPosition = positio;
+                {
+                    tutorialImagesTransform.localPosition = position;
+                    textsTransform.anchoredPosition = new Vector3(position.x/interval*1080.0f,position.y);
+                }
                 else
                 {
                     nowMove = false;
-                    textsTransform.transform.position = tutorialImagesTransform.localPosition = new Vector3(-interval * nowSelectCount, positio.y, positio.z);
+                    textsTransform.transform.position = tutorialImagesTransform.localPosition = new Vector3(-interval * nowSelectCount, position.y, position.z);
+                    textsTransform.anchoredPosition = new Vector3(-1080 * nowSelectCount, position.y);
                 }
             }
             else
             {
                 nowMove = false;
-                textsTransform.transform.position = tutorialImagesTransform.localPosition = new Vector3(-interval * nowSelectCount, positio.y, positio.z);
+                tutorialImagesTransform.localPosition = new Vector3(-interval * nowSelectCount, position.y, 0);
+                textsTransform.anchoredPosition = new Vector3(-1080 * nowSelectCount, position.y);
             }
         }
     }
