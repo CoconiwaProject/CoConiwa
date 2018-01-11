@@ -13,7 +13,7 @@ public class CanvasMode : MonoBehaviour
     {
         float aspect = Camera.main.aspect;
  
-        _isIphoneX = (aspect > 9 / 16);    
+        _isIphoneX = (aspect < 9.0f / 16.0f);    
     }
 
     // Use this for initialization
