@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     [SerializeField]
-    Transform tutorialImagesTransform=null;
+    RectTransform tutorialImagesTransform = null;
 
     [SerializeField]
     RectTransform textsTransform = null;
@@ -19,7 +19,7 @@ public class TutorialManager : MonoBehaviour
 
 
     [SerializeField]
-     Button nextButtone = null;
+    Button nextButtone = null;
     [SerializeField]
     Text buttoneText = null;
 
@@ -27,7 +27,7 @@ public class TutorialManager : MonoBehaviour
     Sprite[] circleSprites = null;
 
     [SerializeField]
-   Image[] circleImages = null;
+    Image[] circleImages = null;
 
     [SerializeField]
     List<Text> tutorialTexts = new List<Text>();
@@ -62,7 +62,7 @@ public class TutorialManager : MonoBehaviour
         PlayerPrefs.SetString("Init", "");
         // UnityEngine.SceneManagement.SceneManager.LoadScene(SceneName);
 
-        if(SystemLanguage.Japanese==AppData.UsedLanguage)
+        if (SystemLanguage.Japanese == AppData.UsedLanguage)
         {
             buttoneText.gameObject.SetActive(false);
         }
@@ -78,11 +78,11 @@ public class TutorialManager : MonoBehaviour
     void Update()
     {
         ImageControl();
-        if (nowMove)
+        if (nowMove&&!isNextScene)
         {
-            Vector3 position = tutorialImagesTransform.localPosition;
+            Vector3 position = tutorialImagesTransform.anchoredPosition;
             float judge = position.x;
-            float judge2 = -interval * nowSelectCount;
+            float judge2 = -1080 * nowSelectCount;
             if (moveSpeed > 0)
             {
                 float copy = judge;
@@ -94,32 +94,32 @@ public class TutorialManager : MonoBehaviour
             {
                 if (moveSpeed > 0)
                 {
-                    position.x += moveSpeed;
+                    position.x += moveSpeed*1080.0f;
                     judge2 = position.x;
                 }
                 else
                 {
-                    position.x += moveSpeed;
+                    position.x += moveSpeed * 1080.0f;
                     judge = position.x;
 
                 }
 
                 if (judge > judge2)
                 {
-                    tutorialImagesTransform.localPosition = position;
-                    textsTransform.anchoredPosition = new Vector3(position.x/interval*1080.0f,position.y);
+                    tutorialImagesTransform.anchoredPosition = new Vector3(position.x /  1080.0f, position.y);
+                    textsTransform.anchoredPosition = new Vector3(position.x / 1080.0f, position.y);
                 }
                 else
                 {
                     nowMove = false;
-                    textsTransform.transform.position = tutorialImagesTransform.localPosition = new Vector3(-interval * nowSelectCount, position.y, position.z);
+                    tutorialImagesTransform.anchoredPosition = new Vector3(-1080 * nowSelectCount, position.y);
                     textsTransform.anchoredPosition = new Vector3(-1080 * nowSelectCount, position.y);
                 }
             }
             else
             {
                 nowMove = false;
-                tutorialImagesTransform.localPosition = new Vector3(-interval * nowSelectCount, position.y, 0);
+                tutorialImagesTransform.anchoredPosition = new Vector3(-1080 * nowSelectCount, position.y);
                 textsTransform.anchoredPosition = new Vector3(-1080 * nowSelectCount, position.y);
             }
         }
@@ -263,10 +263,12 @@ public class TutorialManager : MonoBehaviour
         nowMove = true;
     }
 
+    bool isNextScene=false;
     public void OnNextButtone()
     {
         if (nowSelectCount == EndSelectCount - 1)
         {
+            isNextScene = true;
             UnderBerMenu.I.ChangeHomeScene(sceneName);
         }
         else
@@ -287,12 +289,13 @@ public class TutorialManager : MonoBehaviour
 
     private void ChangeSprite(int oldSelect, int nowSelect)
     {
+        if (isNextScene) return;
         circleImages[oldSelect].sprite = circleSprites[1];
         circleImages[nowSelect].sprite = circleSprites[0];
 
         if (nowSelect == EndSelectCount - 1)
         {
-            if (SystemLanguage.Japanese!=AppData.UsedLanguage)
+            if (SystemLanguage.Japanese != AppData.UsedLanguage)
                 buttoneText.text = useButtoneText[1];
             nextButtone.GetComponent<Image>().sprite = buttoneSprites[2];
             SpriteState s;
@@ -317,7 +320,7 @@ public class TutorialManager : MonoBehaviour
     private void SetStartButtone()
     {
         useButtoneText = new string[EnglishButtoneText.Length];
-        if(AppData.UsedLanguage==SystemLanguage.Chinese|| AppData.UsedLanguage == SystemLanguage.ChineseSimplified)
+        if (AppData.UsedLanguage == SystemLanguage.Chinese || AppData.UsedLanguage == SystemLanguage.ChineseSimplified)
         {
             for (int i = 0; i < useButtoneText.Length; i++)
                 useButtoneText[i] = ChinaSimplificationButtoneText[i];
@@ -332,7 +335,7 @@ public class TutorialManager : MonoBehaviour
             for (int i = 0; i < useButtoneText.Length; i++)
                 useButtoneText[i] = KoreaButtoneText[i];
         }
-        else 
+        else
         {
             for (int i = 0; i < useButtoneText.Length; i++)
                 useButtoneText[i] = EnglishButtoneText[i];
