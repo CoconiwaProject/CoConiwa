@@ -92,7 +92,7 @@ public class ContentManager : MonoBehaviour
         {
             Header.sprite = Prants;
         }
-        else if (h == 'I')
+        else if (h == 'L')
         {
             Header.sprite = Inter;
             ContentsBack.color = new Color(0.19f, 0.3f, 0.54f);
